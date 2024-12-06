@@ -1,0 +1,8 @@
+require 'plugins/catppuccin'
+require 'plugins/mini'
+require 'plugins/mini-ai'
+require 'plugins/mini-files'
+require 'plugins/mini-clue'
+require 'plugins/nvim-cmp'
+require 'plugins/treesitter'
+require 'plugins/telescope'
