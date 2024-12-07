@@ -58,27 +58,8 @@ vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Jump to definition' 
 
 -- Telescope keybinds
 local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>ff', function()
-  builtin.find_files { follow = true }
-end, { desc = 'Telescope files' })
-vim.keymap.set('n', '<leader>fF', function()
-  builtin.find_files { follow = true, hidden = true, no_ignore = true }
-end, { desc = 'Telescope all files' })
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope files' })
 vim.keymap.set('n', '<leader>fw', builtin.live_grep, { desc = 'Telescope words in working directory' })
-vim.keymap.set('n', '<leader>fw', function()
-  builtin.live_grep {
-    additional_args = function(args)
-      return vim.list.extend(args, { '-L' })
-    end,
-  }
-end, { desc = 'Telescope words in working directory' })
-vim.keymap.set('n', '<leader>fW', function()
-  builtin.live_grep {
-    additional_args = function(args)
-      return vim.list.extend(args, { '-L', '--hidden', '--no-ignore' })
-    end,
-  }
-end, { desc = 'Telescope words in all files in working directory' })
 vim.keymap.set('n', '<leader>f/', builtin.current_buffer_fuzzy_find, { desc = 'Telescope words in currend buffer' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
@@ -106,6 +87,7 @@ vim.keymap.set('n', '<c-p>', '<Plug>(YankyPreviousEntry)')
 vim.keymap.set('n', '<c-n>', '<Plug>(YankyNextEntry)')
 
 -- FineCmdline
-vim.keymap.set('n', '<CR>', '<cmd>FineCmdline<CR>', { noremap = true })
+-- vim.keymap.set('n', '<CR>', '<cmd>FineCmdline<CR>', { noremap = true })
+vim.keymap.set('n', ':', '<cmd>FineCmdline<CR>', { noremap = true })
 
 -- vim: ts=2 sts=2 sw=2 et

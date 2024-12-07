@@ -12,6 +12,10 @@ now(function()
       'python',
       'rust',
     },
+    highlight = {
+      enable = true, -- Enable highlighting
+      additional_vim_regex_highlighting = false, -- Use only Treesitter highlighting
+    },
     auto_install = true,
   }
 end)
