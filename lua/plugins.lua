@@ -1,4 +1,6 @@
 require 'plugins/catppuccin'
+require 'plugins/leap'
+require 'plugins/lualine'
 require 'plugins/mini'
 require 'plugins/mini-ai'
 require 'plugins/mini-files'
