@@ -38,6 +38,7 @@ now(function()
   lspconfig.clangd.setup { capabilities = capabilities }
   lspconfig.neocmake.setup { capabilities = capabilities }
   lspconfig.jsonls.setup { capabilities = capabilities }
+  lspconfig.julials.setup { capabilities = capabilities }
   lspconfig.ltex.setup { capabilities = capabilities }
   lspconfig.lua_ls.setup {
     on_init = function(client)

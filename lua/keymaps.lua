@@ -2,10 +2,7 @@
 --  See `:help vim.keymap.set()`
 
 -- Easier exiting into normal mode
-vim.keymap.set('i', 'kj', '<Esc>')
 vim.keymap.set('i', 'jk', '<Esc>')
-vim.keymap.set('i', 'jj', '<Esc>')
-vim.keymap.set('i', 'kk', '<Esc>')
 
 vim.keymap.set('n', '<leader>w', '<Cmd>w<CR>', { desc = 'Save buffer' })
 vim.keymap.set('n', '<leader>c', '<Cmd>bdelete<CR>', { desc = 'Close buffer' })
@@ -65,5 +62,12 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help ta
 vim.keymap.set('n', '<leader>fr', builtin.lsp_references, { desc = 'Telescope LSP references' })
 vim.keymap.set('n', 'gd', builtin.lsp_definitions, { desc = 'Go to definition' })
 vim.keymap.set('n', 'gd', builtin.lsp_implementations, { desc = 'Go to implementation' })
+
+-- Leap keybinds
+vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
+vim.keymap.set({ 'n', 'x', 'o' }, 'S', '<Plug>(leap-from-window)')
+
+-- LazyGit
+vim.keymap.set('n', '<leader>gg', '<Cmd>LazyGit<Cr>')
 
 -- vim: ts=2 sts=2 sw=2 et
