@@ -9,7 +9,7 @@ now(function()
     depends = { 'williamboman/mason.nvim' },
   }
   add { source = 'hrsh7th/cmp-nvim-lsp' }
-  add { source = 'neovim/nvim-lspconfig' }
+  add { source = 'neovim/nvim-lspconfig', depends = { 'nvimdev/lspsaga.nvim' } }
 
   -- Formatter
 

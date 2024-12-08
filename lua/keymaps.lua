@@ -21,7 +21,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 vim.keymap.set('n', '<Space><Space>', function()
-  MiniFiles.open()
+  local MiniFiles = require 'mini.files'
+  local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+  vim.defer_fn(function()
+    MiniFiles.reveal_cwd()
+  end, 30)
 end, { desc = 'Open file explorer' })
 
 -- Keybinds to make split navigation easier.
@@ -61,6 +65,7 @@ local builtin = require 'telescope.builtin'
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope files' })
 vim.keymap.set('n', '<leader>fw', builtin.live_grep, { desc = 'Telescope words in working directory' })
 vim.keymap.set('n', '<leader>f/', builtin.current_buffer_fuzzy_find, { desc = 'Telescope words in currend buffer' })
+vim.keymap.set('n', '<leader>r', builtin.resume, { desc = 'Telescope resume previous search' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 vim.keymap.set('n', '<leader>fr', builtin.lsp_references, { desc = 'Telescope LSP references' })
@@ -85,9 +90,5 @@ vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
 
 vim.keymap.set('n', '<c-p>', '<Plug>(YankyPreviousEntry)')
 vim.keymap.set('n', '<c-n>', '<Plug>(YankyNextEntry)')
-
--- FineCmdline
--- vim.keymap.set('n', '<CR>', '<cmd>FineCmdline<CR>', { noremap = true })
-vim.keymap.set('n', ':', '<cmd>FineCmdline<CR>', { noremap = true })
 
 -- vim: ts=2 sts=2 sw=2 et
