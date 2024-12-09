@@ -1,3 +1,3 @@
 later(function()
-  add { source = 'tpope/vim-surround' }
+    add { source = 'tpope/vim-surround' }
 end)

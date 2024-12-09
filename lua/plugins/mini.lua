@@ -1,15 +1,15 @@
 -- Other miscallaneous or short mini plugins
 
 later(function()
-  require('mini.jump').setup()
-  require('mini.notify').setup()
-  require('mini.pairs').setup()
-  require('mini.splitjoin').setup()
+    require('mini.jump').setup()
+    require('mini.notify').setup()
+    require('mini.pairs').setup()
+    require('mini.splitjoin').setup()
 end)
 
 now(function()
-  require('mini.animate').setup()
-  require('mini.git').setup()
-  require('mini.icons').setup()
-  require('mini.tabline').setup()
+    require('mini.animate').setup()
+    require('mini.git').setup()
+    require('mini.icons').setup()
+    require('mini.tabline').setup()
 end)

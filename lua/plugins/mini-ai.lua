@@ -4,21 +4,21 @@
 --  Has builtins for brackets, quotes, function call, argument, tag, user prompt, and any punctuation/digit/whitespace character.
 
 later(function()
-  require('mini.ai').setup {
-    mappings = {
-      -- Main textobject prefixes
-      around = 'a',
-      inside = 'i',
+    require('mini.ai').setup {
+        mappings = {
+            -- Main textobject prefixes
+            around = 'a',
+            inside = 'i',
 
-      -- Next/last variants
-      around_next = 'an',
-      inside_next = 'in',
-      around_last = 'al',
-      inside_last = 'il',
+            -- Next/last variants
+            around_next = 'an',
+            inside_next = 'in',
+            around_last = 'al',
+            inside_last = 'il',
 
-      -- Move cursor to corresponding edge of `a` textobject
-      goto_left = 'g[',
-      goto_right = 'g]',
-    },
-  }
+            -- Move cursor to corresponding edge of `a` textobject
+            goto_left = 'g[',
+            goto_right = 'g]',
+        },
+    }
 end)

@@ -21,11 +21,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 vim.keymap.set('n', '<Space><Space>', function()
-  local MiniFiles = require 'mini.files'
-  local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
-  vim.defer_fn(function()
-    MiniFiles.reveal_cwd()
-  end, 30)
+    local MiniFiles = require 'mini.files'
+    local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+    vim.defer_fn(function()
+        MiniFiles.reveal_cwd()
+    end, 30)
 end, { desc = 'Open file explorer' })
 
 -- Keybinds to make split navigation easier.
@@ -48,11 +48,11 @@ vim.keymap.set('n', 'L', '<Cmd>bnext<CR>', { desc = 'Move focus to the right buf
 -- Highlight when yanking (copying) text
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+    desc = 'Highlight when yanking (copying) text',
+    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+    callback = function()
+        vim.highlight.on_yank()
+    end,
 })
 
 -- LSP

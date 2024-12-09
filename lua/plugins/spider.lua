@@ -1,3 +1,3 @@
 later(function()
-  add { source = 'chrisgrieser/nvim-spider' }
+    add { source = 'chrisgrieser/nvim-spider' }
 end)

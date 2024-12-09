@@ -1,3 +1,3 @@
 later(function()
-  add { source = 'matze/vim-move' }
+    add { source = 'matze/vim-move' }
 end)

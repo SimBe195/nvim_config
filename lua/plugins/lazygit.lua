@@ -1,3 +1,3 @@
 later(function()
-  add { source = 'kdheepak/lazygit.nvim' }
+    add { source = 'kdheepak/lazygit.nvim' }
 end)

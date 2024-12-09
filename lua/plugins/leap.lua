@@ -1,3 +1,3 @@
 later(function()
-  add { source = 'ggandor/leap.nvim' }
+    add { source = 'ggandor/leap.nvim' }
 end)
