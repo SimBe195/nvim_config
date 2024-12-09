@@ -20,8 +20,8 @@ later(function()
             ['<C-k>'] = cmp.mapping.scroll_docs(-4),
             ['<C-j>'] = cmp.mapping.scroll_docs(4),
             ['<C-Space>'] = cmp.mapping.complete(),
-            ['<Esc>'] = cmp.mapping.abort(),
-            ['<C-y>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            ['q'] = cmp.mapping.abort(),
+            ['<Tab>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         },
         sources = cmp.config.sources({
             { name = 'nvim_lsp' },

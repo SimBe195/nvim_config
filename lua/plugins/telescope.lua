@@ -8,13 +8,10 @@ now(function()
         defaults = {
             mappings = {
                 i = {
-                    ['<C-y>'] = 'select_default',
+                    ['<Cr>'] = 'select_default',
                 },
                 n = {
                     ['q'] = 'close',
-                    ['<C-p>'] = 'move_selection_previous',
-                    ['<C-n>'] = 'move_selection_next',
-                    ['<C-y>'] = 'select_default',
                 },
             },
         },
