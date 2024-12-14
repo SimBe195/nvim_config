@@ -40,6 +40,31 @@ return {
             'nvim-treesitter/nvim-treesitter', -- optional
             'nvim-tree/nvim-web-devicons', -- optional
         },
-        opts = {},
+        opts = {
+            hover = {
+                open_cmd = '!firefox',
+            },
+            lightbulb = {
+                enable = false,
+                sign = false,
+            },
+            scroll_preview = {
+                scroll_down = 'C-u',
+                scroll_up = 'C-d',
+            },
+            definition = {
+                vsplit = '|',
+                split = '-',
+            },
+            rename = {
+                keys = {
+                    quit = '<Esc>',
+                },
+            },
+            floaterm = {
+                height = 0.85,
+                width = 0.85,
+            },
+        },
     },
 }

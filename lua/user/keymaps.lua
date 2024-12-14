@@ -71,7 +71,7 @@ vim.keymap.set({ 'n', 't' }, '<Leader>tt', '<Cmd>Lspsaga term_toggle<Cr>.', { de
 vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<Cr>', { desc = 'Display hover documentation' })
 vim.keymap.set('n', '<Leader>la', '<Cmd>Lspsaga code_action<Cr>', { desc = 'LSP Code action' })
 vim.keymap.set('n', 'gd', '<Cmd>Lspsaga goto_definition<Cr>', { desc = 'Jump to definition' })
-vim.keymap.set('n', '<Leader>ld', '<Cmd>Lspsaga peek_definition<Cr>', { desc = 'Peek to definition' })
+vim.keymap.set('n', '<Leader>ld', '<Cmd>Lspsaga peek_definition<Cr>', { desc = 'Peek definition' })
 vim.keymap.set('n', '<Leader>lr', '<Cmd>Lspsaga rename<Cr>', { desc = 'Rename symbol' })
 vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<Cr>', { desc = 'Go to previous diagnostic' })
 vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_next<Cr>', { desc = 'Go to next diagnostic' })
