@@ -5,7 +5,19 @@ return {
         build = ':TSUpdate',
         event = 'BufReadPost',
         opts = {
-            ensure_installed = { 'c', 'cpp', 'lua', 'vim', 'vimdoc', 'markdown', 'python', 'rust', 'julia' },
+            ensure_installed = {
+                'c',
+                'cpp',
+                'lua',
+                'vim',
+                'vimdoc',
+                'markdown',
+                'python',
+                'rust',
+                'julia',
+                'markdown',
+                'markdown_inline',
+            },
             highlight = {
                 enable = true,
                 additional_vim_regex_highlighting = false, -- Use only Treesitter highlighting

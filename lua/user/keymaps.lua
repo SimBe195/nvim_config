@@ -7,11 +7,11 @@ vim.keymap.set('n', '<Leader>lf', function()
     require('conform').format { async = true }
 end, { desc = 'Format buffer' })
 
-vim.keymap.set('n', '<Leader>w', '<Cmd>w<CR>', { desc = 'Save buffer' })
-vim.keymap.set('n', '<Leader>c', '<Cmd>bdelete<CR>', { desc = 'Close buffer' })
+vim.keymap.set('n', '<Leader>w', '<Cmd>w<Cr>', { desc = 'Save buffer' })
+vim.keymap.set('n', '<Leader>c', '<Cmd>bdelete<Cr>', { desc = 'Close buffer' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
-vim.keymap.set('n', '<Esc>', '<Cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<Esc>', '<Cmd>nohlsearch<Cr>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
@@ -32,19 +32,8 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- Keybinds to make buffer navigation easier.
 --  Use Shift+<hl> to switch between buffers
-vim.keymap.set('n', 'H', '<Cmd>bprev<CR>', { desc = 'Move focus to the left buffer' })
-vim.keymap.set('n', 'L', '<Cmd>bnext<CR>', { desc = 'Move focus to the right buffer' })
-
--- LSP
-vim.keymap.set('n', '<Leader>lr', vim.lsp.buf.rename, { desc = 'Rename' })
-vim.keymap.set('n', '<Leader>la', vim.lsp.buf.code_action, { desc = 'LSP Code action' })
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Jump to definition' })
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Display hover information' })
-vim.keymap.set('n', '<Leader>lr', vim.lsp.buf.rename, { desc = 'Rename symbol' })
-vim.keymap.set('n', '<Leader>la', vim.lsp.buf.code_action, { desc = 'Show code actions' })
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic' })
+vim.keymap.set('n', 'H', '<Cmd>bprev<Cr>', { desc = 'Move focus to the left buffer' })
+vim.keymap.set('n', 'L', '<Cmd>bnext<Cr>', { desc = 'Move focus to the right buffer' })
 
 -- Telescope keybinds
 local builtin = require 'telescope.builtin'
@@ -76,5 +65,15 @@ vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
 
 vim.keymap.set('n', '<C-p>', '<Plug>(YankyPreviousEntry)')
 vim.keymap.set('n', '<C-n>', '<Plug>(YankyNextEntry)')
+
+-- LspSaga
+vim.keymap.set({ 'n', 't' }, '<Leader>tt', '<Cmd>Lspsaga term_toggle<Cr>.', { desc = 'Toggle floating terminal' })
+vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<Cr>', { desc = 'Display hover documentation' })
+vim.keymap.set('n', '<Leader>la', '<Cmd>Lspsaga code_action<Cr>', { desc = 'LSP Code action' })
+vim.keymap.set('n', 'gd', '<Cmd>Lspsaga goto_definition<Cr>', { desc = 'Jump to definition' })
+vim.keymap.set('n', '<Leader>ld', '<Cmd>Lspsaga peek_definition<Cr>', { desc = 'Peek to definition' })
+vim.keymap.set('n', '<Leader>lr', '<Cmd>Lspsaga rename<Cr>', { desc = 'Rename symbol' })
+vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<Cr>', { desc = 'Go to previous diagnostic' })
+vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_next<Cr>', { desc = 'Go to next diagnostic' })
 
 -- vim: ts=2 sts=2 sw=2 et

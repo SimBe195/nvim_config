@@ -33,4 +33,13 @@ return {
         dependencies = { 'stevearc/conform.nvim', 'williamboman/mason.nvim' },
         opts = {},
     },
+    {
+        'nvimdev/lspsaga.nvim',
+        event = 'LspAttach',
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter', -- optional
+            'nvim-tree/nvim-web-devicons', -- optional
+        },
+        opts = {},
+    },
 }
