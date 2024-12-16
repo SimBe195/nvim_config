@@ -1,7 +1,27 @@
 return {
     {
         'max397574/better-escape.nvim',
-        opts = {},
+        opts = {
+            mappings = {
+                i = {
+                    j = {
+                        k = '<Esc>',
+                    },
+                },
+                c = {
+                    j = {
+                        k = '<Esc>',
+                    },
+                },
+                t = {
+                    j = {
+                        k = '<C-\\><C-n>',
+                    },
+                },
+                v = {},
+                s = {},
+            },
+        },
     },
     {
         'windwp/nvim-autopairs',

@@ -19,3 +19,13 @@ autocmd('TextYankPost', {
         vim.highlight.on_yank()
     end,
 })
+
+autocmd({ 'BufRead', 'BufNewFile' }, {
+    pattern = '*.config',
+    command = 'set filetype=ini',
+})
+
+autocmd({ 'BufRead', 'BufNewFile' }, {
+    pattern = 'returnn.config',
+    command = 'set filetype=python',
+})

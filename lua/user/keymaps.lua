@@ -1,8 +1,5 @@
 -- [[ Basic Keymaps ]]
 
--- Easier exiting into normal mode
-vim.keymap.set('i', 'jk', '<Esc>')
-
 vim.keymap.set('n', '<Leader>lf', function()
     require('conform').format { async = true }
 end, { desc = 'Format buffer' })
