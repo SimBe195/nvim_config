@@ -28,7 +28,8 @@ local servers = {
 mason_lspconfig.setup_handlers {
     function(server_name)
         lspconfig[server_name].setup {
-            capabilities = vim.lsp.protocol.make_client_capabilities(),
+            capabilities = require('blink.cmp').get_lsp_capabilities(),
+            -- capabilities = vim.lsp.protocol.make_client_capabilities(),
             settings = servers[server_name],
         }
     end,

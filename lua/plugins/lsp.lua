@@ -1,7 +1,5 @@
 return {
-    {
-        'neovim/nvim-lspconfig',
-    },
+    { 'neovim/nvim-lspconfig', dependencies = { 'saghen/blink.cmp' } },
     {
         'williamboman/mason-lspconfig.nvim', -- Bridge between Mason and nvim-lspconfig
         dependencies = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
@@ -49,8 +47,8 @@ return {
                 sign = false,
             },
             scroll_preview = {
-                scroll_down = 'C-u',
-                scroll_up = 'C-d',
+                scroll_down = '<C-u>',
+                scroll_up = '<C-d>',
             },
             definition = {
                 vsplit = '|',

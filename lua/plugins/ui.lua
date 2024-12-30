@@ -2,7 +2,7 @@
 -- formatters and linters from null-ls, nvim-lint and formatter.nvim
 
 local function get_attached_clients()
-    local buf_clients = vim.lsp.get_active_clients { bufnr = 0 }
+    local buf_clients = vim.lsp.get_clients { bufnr = 0 }
     if #buf_clients == 0 then
         return 'LSP Inactive'
     end
@@ -35,39 +35,8 @@ local function get_attached_clients()
 end
 
 return {
-    {
-        'folke/todo-comments.nvim',
-        opts = {},
-    },
-    {
-        'nvim-tree/nvim-web-devicons',
-        opts = {},
-    },
-    {
-        'stevearc/oil.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        opts = {
-            default_file_explorer = true,
-            columns = { 'icon' },
-            keymaps = {
-                ['g?'] = { 'actions.show_help', mode = 'n' },
-                ['l'] = { 'actions.select', mode = 'n' },
-                ['|'] = { 'actions.select', opts = { vertical = true } },
-                ['-'] = { 'actions.select', opts = { horizontal = true } },
-                ['K'] = 'actions.preview',
-                ['q'] = { 'actions.close', mode = 'n' },
-                ['<C-r>'] = 'actions.refresh',
-                ['h'] = { 'actions.parent', mode = 'n' },
-                ['_'] = { 'actions.open_cwd', mode = 'n' },
-                ['`'] = { 'actions.cd', mode = 'n' },
-                ['~'] = { 'actions.cd', opts = { scope = 'tab' }, mode = 'n' },
-                ['gs'] = { 'actions.change_sort', mode = 'n' },
-                ['gx'] = 'actions.open_external',
-                ['g.'] = { 'actions.toggle_hidden', mode = 'n' },
-                ['g\\'] = { 'actions.toggle_trash', mode = 'n' },
-            },
-        },
-    },
+    { 'folke/todo-comments.nvim', opts = {} },
+    { 'nvim-tree/nvim-web-devicons', opts = {} },
     {
         'folke/noice.nvim',
         dependencies = { 'MunifTanjim/nui.nvim' },
@@ -97,9 +66,11 @@ return {
             flavour = 'mocha',
             transparent_background = false,
             integrations = {
+                blink_cmp = true,
                 dashboard = true,
                 mason = true,
                 cmp = true,
+                harpoon = true,
                 native_lsp = {
                     enabled = true,
                     virtual_text = {
@@ -120,6 +91,14 @@ return {
                         background = true,
                     },
                 },
+                nvim_surround = true,
+                leap = true,
+                indent_blankline = {
+                    enabled = true,
+                    scope_color = '',
+                    colored_indent_levels = false,
+                },
+                lsp_saga = true,
                 treesitter = true,
                 telescope = {
                     enabled = true,
@@ -130,6 +109,8 @@ return {
                     enabled = true,
                     indentscope_color = '',
                 },
+                snacks = true,
+                which_key = true,
                 -- For more plugins integrations see https://github.com/catppuccin/nvim#integrations
             },
         },
@@ -137,10 +118,6 @@ return {
             require('catppuccin').setup(opts)
             vim.cmd.colorscheme 'catppuccin'
         end,
-    },
-    {
-        'nvimdev/dashboard-nvim',
-        opts = {},
     },
     {
         'akinsho/bufferline.nvim',
@@ -174,6 +151,25 @@ return {
         end,
     },
     {
+        'echasnovski/mini.diff',
+        event = 'VeryLazy',
+        opts = {
+            view = {
+                style = 'sign',
+                signs = {
+                    add = '▎',
+                    change = '▎',
+                    delete = '',
+                },
+                diff_color = {
+                    added = { fg = '#98be65' },
+                    modified = { fg = '#FF8800' },
+                    removed = { fg = '#ec5f67' },
+                },
+            },
+        },
+    },
+    {
         'nvim-lualine/lualine.nvim',
         event = { 'VimEnter', 'BufReadPost', 'BufNewFile' },
         config = function()
@@ -192,7 +188,23 @@ return {
                 },
                 sections = {
                     lualine_a = { 'mode' },
-                    lualine_b = { 'branch', 'diff', 'diagnostics' },
+                    lualine_b = {
+                        'branch',
+                        {
+                            'diff',
+                            symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
+                            source = function()
+                                local summary = vim.b.minidiff_summary
+                                return summary
+                                    and {
+                                        added = summary.add,
+                                        modified = summary.change,
+                                        removed = summary.delete,
+                                    }
+                            end,
+                        },
+                        'diagnostics',
+                    },
                     lualine_c = { { 'filetype', icon_only = true }, { 'filename', path = 1 } },
                     lualine_x = { attached_clients },
                     lualine_y = { 'progress' },
@@ -200,5 +212,10 @@ return {
                 },
             }
         end,
+    },
+    {
+        'lukas-reineke/indent-blankline.nvim',
+        main = 'ibl',
+        opts = {},
     },
 }

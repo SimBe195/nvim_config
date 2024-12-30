@@ -1,6 +1,7 @@
 return {
     {
         'hrsh7th/nvim-cmp', -- Autocompletion plugin
+        enabled = false,
         dependencies = {
             'hrsh7th/cmp-nvim-lsp', -- LSP completions
             'hrsh7th/cmp-buffer', -- Buffer completions
@@ -71,5 +72,48 @@ return {
                 }),
             })
         end,
+    },
+    {
+        'saghen/blink.cmp',
+        version = '*',
+        dependencies = { 'rafamadriz/friendly-snippets' },
+        event = 'InsertEnter',
+        opts = {
+            appearance = { nerd_font_variant = 'mono' },
+            completion = {
+                accept = {
+                    auto_brackets = {
+                        enabled = true,
+                    },
+                },
+                menu = {
+                    draw = {
+                        treesitter = { 'lsp' },
+                    },
+                },
+                documentation = {
+                    auto_show = true,
+                    auto_show_delay_ms = 200,
+                },
+                ghost_text = {
+                    enabled = true,
+                },
+            },
+            signature = {
+                enabled = true,
+            },
+            sources = {
+                default = { 'lsp', 'path', 'snippets', 'buffer' },
+                cmdline = {},
+            },
+            keymap = {
+                preset = 'enter',
+                ['<C-y>'] = { 'select_and_accept' },
+                ['<C-space>'] = { 'hide' },
+                ['<C-u>'] = { 'scroll_documentation_up' },
+                ['<C-d>'] = { 'scroll_documentation_down' },
+            },
+        },
+        opts_extend = { 'sources.default' },
     },
 }

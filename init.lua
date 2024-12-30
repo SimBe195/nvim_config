@@ -10,10 +10,10 @@ vim.g.have_nerd_font = true
 require 'lazy_bootstrap'
 
 -- Load core configurations
-require 'user.options'
-require 'user.lsp'
-require 'user.keymaps'
-require 'user.autocmds'
+require 'config.options'
+require 'config.lsp'
+require 'config.keymaps'
+require 'config.autocmds'
 
 -- -- [[ Install mini ]]
 -- require 'mini_bootstrap'
