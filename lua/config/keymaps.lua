@@ -7,6 +7,7 @@ end, { desc = 'Format buffer' })
 
 map('n', '<Leader>w', '<Cmd>w<Cr>', { desc = 'Save buffer' })
 map('n', '<Leader>c', '<Cmd>bdelete<Cr>', { desc = 'Close buffer' })
+map('n', '<Leader>qq', '<Cmd>qa<Cr>', { desc = 'Exit neovim' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 map('n', '<Esc>', '<Cmd>nohlsearch<Cr>')
