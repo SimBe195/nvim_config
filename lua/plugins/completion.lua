@@ -107,9 +107,7 @@ return {
                 cmdline = {},
             },
             keymap = {
-                preset = 'enter',
-                ['<C-y>'] = { 'select_and_accept' },
-                ['<C-space>'] = { 'hide' },
+                preset = 'super-tab',
                 ['<C-u>'] = { 'scroll_documentation_up' },
                 ['<C-d>'] = { 'scroll_documentation_down' },
             },
