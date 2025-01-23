@@ -6,8 +6,22 @@ map('n', '<Leader>lf', function()
 end, { desc = 'Format buffer' })
 
 map('n', '<Leader>w', '<Cmd>w<Cr>', { desc = 'Save buffer' })
-map('n', '<Leader>c', '<Cmd>bdelete<Cr>', { desc = 'Close buffer' })
+map('n', '<Leader>c', function()
+    Snacks.bufdelete()
+end, { desc = 'Close buffer' })
 map('n', '<Leader>qq', '<Cmd>qa<Cr>', { desc = 'Exit neovim' })
+
+-- better up/down
+map({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr = true, silent = true })
+map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
+
+-- better indenting
+map('v', '<', '<gv')
+map('v', '>', '>gv')
+
+-- quickfix navigation
+map('n', '[q', vim.cmd.cprev, { desc = 'Previous Quickfix' })
+map('n', ']q', vim.cmd.cnext, { desc = 'Next Quickfix' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 map('n', '<Esc>', '<Cmd>nohlsearch<Cr>')
@@ -79,15 +93,22 @@ map('n', '<C-p>', '<Plug>(YankyPreviousEntry)')
 map('n', '<C-n>', '<Plug>(YankyNextEntry)')
 
 -- Lsp
-map({ 'n', 't' }, '<Leader>tt', '<Cmd>Lspsaga term_toggle<Cr>', { desc = 'Toggle floating terminal' })
-map('n', 'K', '<Cmd>Lspsaga hover_doc<Cr>', { desc = 'Display hover documentation' })
+map('n', 'K', function()
+    return vim.lsp.buf.hover()
+end, { desc = 'Display hover documentation' })
 map('n', 'gK', function()
     return vim.lsp.buf.signature_help()
 end, { desc = 'Signature help' })
-map('n', '<Leader>la', '<Cmd>Lspsaga code_action<Cr>', { desc = 'LSP Code action' })
-map('n', 'gd', '<Cmd>Lspsaga goto_definition<Cr>', { desc = 'Jump to definition' })
-map('n', '<Leader>ld', '<Cmd>Lspsaga peek_definition<Cr>', { desc = 'Peek definition' })
-map('n', '<Leader>lr', '<Cmd>Lspsaga rename<Cr>', { desc = 'Rename symbol' })
+map('i', '<C-k>', function()
+    return vim.lsp.buf.signature_help()
+end, { desc = 'Signature help' })
+map('n', 'gd', vim.lsp.buf.definition, { desc = 'Jump to definition' })
+map('n', 'gD', vim.lsp.buf.declaration, { desc = 'Jump to declaration' })
+map('n', 'gi', vim.lsp.buf.implementation, { desc = 'Jump to implementation' })
+map('n', 'gy', vim.lsp.buf.type_definition, { desc = 'Jump to type definition' })
+map('n', 'gr', vim.lsp.buf.references, { desc = 'References' })
+map('n', '<Leader>la', vim.lsp.buf.code_action, { desc = 'LSP code action' })
+map('n', '<Leader>lr', vim.lsp.buf.rename, { desc = 'Rename' })
 map('n', '<Leader>lR', function()
     Snacks.rename.rename_file()
 end, { desc = 'Rename file' })

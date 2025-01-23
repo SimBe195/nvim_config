@@ -127,20 +127,21 @@ return {
             require('bufferline').setup {
                 options = {
                     numbers = 'none', -- Set to "ordinal" or "buffer_id" if you want numbers
-                    diagnostics = 'nvim_lsp', -- Show LSP diagnostics in the tabline
+                    diagnostics = false, -- Show LSP diagnostics in the tabline
                     separator_style = 'slant', -- Options: "slant", "thick", "thin", etc.
                     show_close_icon = true,
                     show_buffer_close_icons = true,
+                    show_buffer_icons = true,
                     always_show_bufferline = true,
                 },
                 highlights = require('catppuccin.groups.integrations.bufferline').get {
                     styles = { 'italic', 'bold' },
                     custom = {
                         all = {
-                            fill = { bg = '#000000' },
+                            fill = { bg = mocha.crust },
                         },
                         mocha = {
-                            background = { fg = mocha.text },
+                            background = { fg = mocha.surface2 },
                         },
                         latte = {
                             background = { fg = '#000000' },

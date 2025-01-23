@@ -15,7 +15,7 @@ opt.showmode = false
 opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
 -- Sync clipboard between OS and Neovim.
-opt.clipboard = { 'unnamed', 'unnamedplus' }
+opt.clipboard = 'unnamedplus'
 
 -- What to show when triggering completion in insert mode
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
@@ -112,5 +112,15 @@ opt.smoothscroll = true
 opt.foldexpr = "v:lua.require'util.ui'.foldexpr()"
 opt.foldmethod = 'expr'
 opt.foldtext = ''
+
+-- Folding look
+opt.fillchars = {
+    foldopen = '',
+    foldclose = '',
+    fold = ' ',
+    foldsep = ' ',
+    diff = '╱',
+    eob = ' ',
+}
 
 -- vim: ts=2 sts=2 sw=2 et

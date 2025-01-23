@@ -13,13 +13,14 @@ return {
                         ['q'] = 'close',
                     },
                 },
+                path_display = { 'truncate' },
             },
         },
     },
-    { 'kdheepak/lazygit.nvim' },
     {
         'folke/which-key.nvim',
         opts = {
+            preset = 'helix',
             plugins = {
                 spelling = {
                     enabled = true, -- Enable spelling hints
@@ -58,8 +59,19 @@ return {
             windows = {
                 preview = true,
                 width_nofocus = 10,
-                width_focus = 30,
-                width_preview = 50,
+                width_focus = 50,
+                width_preview = 80,
+            },
+        },
+    },
+    {
+        'akinsho/toggleterm.nvim',
+        version = '*',
+        opts = {
+            direction = 'float',
+            open_mapping = [[<leader>tt]],
+            float_opts = {
+                border = 'curved',
             },
         },
     },
