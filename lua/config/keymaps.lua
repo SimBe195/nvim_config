@@ -28,6 +28,7 @@ map('n', '<Esc>', '<Cmd>nohlsearch<Cr>')
 
 -- Diagnostic keymaps
 map('n', '<Leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
+map('n', '<Leader>d', vim.diagnostic.open_float, { desc = 'Open diagnostics in float' })
 
 -- Exit terminal mode in the builtin terminal.
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
@@ -108,12 +109,10 @@ map('n', 'gi', vim.lsp.buf.implementation, { desc = 'Jump to implementation' })
 map('n', 'gy', vim.lsp.buf.type_definition, { desc = 'Jump to type definition' })
 map('n', 'gr', vim.lsp.buf.references, { desc = 'References' })
 map('n', '<Leader>la', vim.lsp.buf.code_action, { desc = 'LSP code action' })
-map('n', '<Leader>lr', vim.lsp.buf.rename, { desc = 'Rename' })
+map('n', '<Leader>lr', vim.lsp.buf.rename, { desc = 'Rename symbol' })
 map('n', '<Leader>lR', function()
     Snacks.rename.rename_file()
 end, { desc = 'Rename file' })
-map('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<Cr>', { desc = 'Go to previous diagnostic' })
-map('n', ']d', '<Cmd>Lspsaga diagnostic_jump_next<Cr>', { desc = 'Go to next diagnostic' })
 
 -- Snacks
 map('n', '<leader>c', function()
