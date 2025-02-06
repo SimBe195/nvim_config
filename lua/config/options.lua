@@ -1,6 +1,9 @@
 -- [[ Setting options ]]
 local opt = vim.opt
 
+-- Enables 24-bit RGB in TUI
+opt.termguicolors = true
+
 -- Make line numbers default
 opt.number = true
 opt.relativenumber = true

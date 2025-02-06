@@ -219,4 +219,13 @@ return {
         main = 'ibl',
         opts = {},
     },
+    {
+        'norcalli/nvim-colorizer.lua',
+        event = { 'BufNewFile', 'BufReadPost' },
+        config = function()
+            require('colorizer').setup({ '*' }, {
+                css = true,
+            })
+        end,
+    },
 }
