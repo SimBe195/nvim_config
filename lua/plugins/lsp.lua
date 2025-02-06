@@ -20,6 +20,7 @@ return {
             formatters_by_ft = {
                 lua = { 'stylua' },
                 python = { 'black' },
+                cmake = { 'cmake_format' },
                 cpp = { 'clang_format' },
                 rust = { 'rustfmt' },
                 julia = { 'julia_formatter' },
