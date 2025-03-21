@@ -1,23 +1,5 @@
 return {
     {
-        'nvim-telescope/telescope.nvim',
-        dependencies = { 'nvim-lua/plenary.nvim' },
-        cmd = 'Telescope',
-        opts = {
-            defaults = {
-                mappings = {
-                    i = {
-                        ['<Esc>'] = 'close',
-                    },
-                    n = {
-                        ['q'] = 'close',
-                    },
-                },
-                path_display = { 'truncate' },
-            },
-        },
-    },
-    {
         'folke/which-key.nvim',
         opts = {
             preset = 'helix',
@@ -52,7 +34,7 @@ return {
                 reset = '<Bs>',
                 reveal_cwd = '@',
                 show_help = 'g?',
-                synchronize = '<leader>w',
+                synchronize = '<ctrl>s',
                 trim_left = '<',
                 trim_right = '>',
             },
@@ -61,17 +43,6 @@ return {
                 width_nofocus = 10,
                 width_focus = 50,
                 width_preview = 80,
-            },
-        },
-    },
-    {
-        'akinsho/toggleterm.nvim',
-        version = '*',
-        opts = {
-            direction = 'float',
-            open_mapping = [[<leader>tt]],
-            float_opts = {
-                border = 'curved',
             },
         },
     },

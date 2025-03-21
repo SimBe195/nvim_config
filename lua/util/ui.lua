@@ -1,27 +1,4 @@
 return {
-    -- optimized treesitter foldexpr for Neovim >= 0.10.0
-    -- Taken from lazyvim/util/ui.lua
-    foldexpr = function()
-        local buf = vim.api.nvim_get_current_buf()
-        if vim.b[buf].ts_folds == nil then
-            local ft = vim.bo[buf].filetype
-            -- as long as we don't have a filetype, don't bother
-            -- checking if treesitter is available (it won't)
-            if ft == '' then
-                return '0'
-            end
-
-            -- Check if a custom query file exists for this filetype
-            local query_path = string.format('%s/queries/%s/folds.scm', vim.fn.stdpath 'config', ft)
-
-            if (vim.uv or vim.loop).fs_stat(query_path) then
-                vim.b[buf].ts_folds = pcall(vim.treesitter.get_parser, buf)
-            else
-                vim.b[buf].ts_folds = false
-            end
-        end
-        return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or '0'
-    end,
     smart_resize = function(direction)
         local win_id = vim.fn.win_getid()
         local win_pos = vim.fn.win_screenpos(win_id)

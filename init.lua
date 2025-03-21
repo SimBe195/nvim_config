@@ -14,17 +14,3 @@ require 'config.options'
 require 'config.lsp'
 require 'config.keymaps'
 require 'config.autocmds'
-
--- -- [[ Install mini ]]
--- require 'mini_bootstrap'
---
--- -- [[ Setting options ]]
--- require 'options'
---
--- -- [[ Set up LSP ]]
--- require 'lsp'
---
--- -- [[ Various plugins ]]
--- require 'plugins'
-
--- vim: ts=2 sts=2 sw=2 et
