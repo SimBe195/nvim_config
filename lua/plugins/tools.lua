@@ -34,7 +34,7 @@ return {
                 reset = '<Bs>',
                 reveal_cwd = '@',
                 show_help = 'g?',
-                synchronize = '<ctrl>s',
+                synchronize = '<C-s>',
                 trim_left = '<',
                 trim_right = '>',
             },
