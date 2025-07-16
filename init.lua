@@ -11,6 +11,5 @@ require 'lazy_bootstrap'
 
 -- Load core configurations
 require 'config.options'
-require 'config.lsp'
 require 'config.keymaps'
 require 'config.autocmds'
