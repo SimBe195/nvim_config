@@ -21,6 +21,11 @@ return {
         {
             'saghen/blink.cmp',
             opts = {
+                completion = {
+                    ghost_text = {
+                        enabled = false,
+                    },
+                },
                 keymap = {
                     preset = 'super-tab',
                     ['<C-u>'] = { 'scroll_documentation_up' },
