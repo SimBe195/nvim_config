@@ -83,7 +83,7 @@ return {
                 separator_style = 'slant', -- Options: "slant", "thick", "thin", etc.
                 always_show_bufferline = true,
             },
-            highlights = require('catppuccin.groups.integrations.bufferline').get {
+            highlights = require('catppuccin.groups.integrations.bufferline').get_theme {
                 styles = { 'italic', 'bold' },
                 custom = {
                     all = {
@@ -100,7 +100,7 @@ return {
         },
     },
     {
-        'echasnovski/mini.diff',
+        'nvim-mini/mini.diff',
         event = 'VeryLazy',
         opts = {
             view = {
