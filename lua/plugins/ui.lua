@@ -83,20 +83,6 @@ return {
                 separator_style = 'slant', -- Options: "slant", "thick", "thin", etc.
                 always_show_bufferline = true,
             },
-            highlights = require('catppuccin.groups.integrations.bufferline').get_theme {
-                styles = { 'italic', 'bold' },
-                custom = {
-                    all = {
-                        fill = { bg = require('catppuccin.palettes').get_palette('mocha').crust },
-                    },
-                    mocha = {
-                        background = { fg = require('catppuccin.palettes').get_palette('mocha').surface2 },
-                    },
-                    latte = {
-                        background = { fg = '#000000' },
-                    },
-                },
-            },
         },
     },
     {
