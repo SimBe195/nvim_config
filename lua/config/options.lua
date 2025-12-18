@@ -36,6 +36,9 @@ opt.wildignore = { '*.o', '*.obj', '*.jpg', '*.png', '*.gif', '*.zip', '*.pyc', 
 -- Disable line wrap
 opt.wrap = false
 
+-- Enable next edit suggestions from sidekick
+vim.g.sidekick_nes = true
+
 -- Folding look
 opt.fillchars = {
     foldopen = '',
