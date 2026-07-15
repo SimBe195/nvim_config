@@ -99,4 +99,17 @@ return {
             },
         },
     },
+    {
+        'm00qek/baleia.nvim',
+        config = function()
+            local baleia = require('baleia').setup {}
+
+            vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
+                pattern = { 'log*', '*log' },
+                callback = function(args)
+                    baleia.once(args.buf)
+                end,
+            })
+        end,
+    },
 }
