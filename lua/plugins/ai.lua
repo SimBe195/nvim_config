@@ -67,4 +67,16 @@ return {
             -- 'nvim_mini/mini.nvim',
         },
     },
+    {
+        'folke/sidekick.nvim',
+        opts = {
+            cli = {
+                tools = {
+                    codex = {
+                        cmd = { 'codex', '--sandbox', 'danger-full-access' },
+                    },
+                },
+            },
+        },
+    },
 }
