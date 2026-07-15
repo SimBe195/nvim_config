@@ -17,6 +17,15 @@ autocmd({ 'BufRead', 'BufNewFile' }, {
     group = '__filetypes__',
 })
 
+autocmd('FileType', {
+    group = '__filetypes__',
+    pattern = { 'text' },
+    callback = function()
+        vim.opt_local.wrap = false
+        vim.opt_local.spell = true
+    end,
+})
+
 autocmd({ 'BufWritePre' }, {
     desc = 'Auto create dir when saving a file, in case some intermediate directory does not exist',
     group = augroup '__auto_create_dir__',
