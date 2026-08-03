@@ -113,9 +113,6 @@ opt.showmatch = true
 opt.swapfile = false
 opt.backup = false
 
--- Improve scrolling performance in larger files
-opt.lazyredraw = true
-
 -- Limit syntax highlighting to first 500 columns
 opt.synmaxcol = 500
 

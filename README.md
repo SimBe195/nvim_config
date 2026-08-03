@@ -49,38 +49,41 @@ Leader is `<space>`.
 
 | Key | Action |
 | --- | --- |
-| `<leader><space>` | Find files from project root |
-| `<leader>,` | Pick open buffers |
-| `<leader>/` | Grep from project root |
-| `<leader>:` | Command history |
-| `<leader>w` | Save buffer |
+| `<C-s>` | Save buffer |
 | `<leader>bd` | Close buffer |
 | `<leader>bD` | Close all other buffers |
 | `<leader>qq` | Quit Neovim |
+| `<leader>wq` | Close window |
 | `<leader>e` | Mini.files at current file |
 | `<leader>E` | Mini.files at cwd |
 | `<S-h>` / `<S-l>` | Previous / next buffer |
 | `<C-h/j/k/l>` | Move between Neovim splits and tmux panes |
 | `<C-Up/Down/Left/Right>` | Resize windows |
 | `<leader>ff` / `<leader>fF` | Files from root / cwd |
-| `<leader>fe` | Mini.files at project root |
 | `<leader>fg` | Git files |
 | `<leader>fb` | Buffers |
 | `<leader>fh` | Help tags |
 | `<leader>fo` | Recent files |
 | `<leader>fp` | Projects |
-| `<leader>f/` | Lines in current buffer |
-| `<leader>fR` | Resume picker |
-| `<leader>sg` / `<leader>sG` | Grep from root / cwd |
-| `<leader>sb` | Grep open buffers |
-| `<leader>sw` / `<leader>sW` | Grep word under cursor from root / cwd |
-| `<leader>ss` / `<leader>sS` | Buffer symbols / workspace symbols |
-| `<leader>sk` | Keymaps |
-| `<leader>su` | Undo history |
-| `<leader>xx` / `<leader>xX` | Workspace / buffer diagnostics |
-| `<leader>xd` | Line diagnostics float |
-| `<leader>xq` | Diagnostic loclist |
-| `<leader>uC` | Colorschemes |
+| `<leader>fl` | Lines in current buffer |
+| `<leader>fr` | Resume picker |
+| `<leader>fk` | Keymaps |
+| `<leader>fu` | Undo history |
+| `<leader>f:` | Command history |
+| `<leader>fC` | Colorschemes |
+| `<leader>fs` / `<leader>fS` | Grep from root / cwd |
+| `<leader>fB` | Grep open buffers |
+| `<leader>fw` / `<leader>fW` | Grep word under cursor from root / cwd |
+| `<leader>cf` / `<leader>cF` | Format buffer / injected languages |
+| `<leader>ca` | Code action |
+| `<leader>cr` / `<leader>cR` | Rename symbol / file |
+| `<leader>cN` | Incremental rename |
+| `<leader>ci` | LSP info |
+| `<leader>cm` | Mason |
+| `<leader>cs` / `<leader>cS` | Document / workspace symbols |
+| `<leader>cx` / `<leader>cX` | Workspace / buffer diagnostics |
+| `<leader>cd` | Line diagnostics float |
+| `<leader>cq` | Diagnostic loclist |
 | `<leader>gg` | Lazygit |
 | `<leader>gf` | Lazygit current file history |
 | `<leader>gl` | Lazygit log |

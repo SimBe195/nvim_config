@@ -18,17 +18,16 @@ return {
             spec = {
                 { '<leader>a', group = 'ai', mode = { 'n', 'x' } },
                 { '<leader>b', group = 'buffers' },
+                { '<leader>c', group = 'code', mode = { 'n', 'x' } },
                 { '<leader>d', group = 'debug' },
-                { '<leader>f', group = 'files' },
+                { '<leader>dp', group = 'python debug' },
+                { '<leader>f', group = 'find', mode = { 'n', 'x' } },
                 { '<leader>g', group = 'git' },
-                { '<leader>l', group = 'lsp' },
                 { '<leader>m', group = 'markdown' },
                 { '<leader>q', group = 'quit' },
                 { '<leader>r', group = 'refactor', mode = { 'n', 'x' } },
-                { '<leader>s', group = 'search' },
                 { '<leader>t', group = 'terminal' },
-                { '<leader>u', group = 'ui' },
-                { '<leader>x', group = 'diagnostics' },
+                { '<leader>w', group = 'windows' },
                 { '<localleader>l', group = 'vimtex' },
             },
             plugins = {
@@ -58,13 +57,6 @@ return {
                     return vim.uv.cwd()
                 end),
                 desc = 'Explorer cwd',
-            },
-            {
-                '<leader>fe',
-                mini_files(function()
-                    return require('util.root').get()
-                end),
-                desc = 'Explorer root',
             },
         },
         opts = {
@@ -220,7 +212,7 @@ return {
             },
         },
         keys = {
-            { '<leader>lv', '<cmd>VenvSelect<cr>', desc = 'Select virtualenv', ft = 'python' },
+            { '<leader>cv', '<cmd>VenvSelect<cr>', desc = 'Select virtualenv', ft = 'python' },
         },
     },
 }

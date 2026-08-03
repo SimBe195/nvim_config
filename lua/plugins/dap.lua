@@ -48,8 +48,8 @@ return {
             { '<leader>ds', function() require('dap').session() end, desc = 'Session' },
             { '<leader>dt', function() require('dap').terminate() end, desc = 'Terminate' },
             { '<leader>dw', function() require('dap.ui.widgets').hover() end, desc = 'Widgets' },
-            { '<leader>dPt', function() require('dap-python').test_method() end, desc = 'Debug Python method', ft = 'python' },
-            { '<leader>dPc', function() require('dap-python').test_class() end, desc = 'Debug Python class', ft = 'python' },
+            { '<leader>dpm', function() require('dap-python').test_method() end, desc = 'Debug Python method', ft = 'python' },
+            { '<leader>dpc', function() require('dap-python').test_class() end, desc = 'Debug Python class', ft = 'python' },
         },
         config = function()
             local dap = require 'dap'

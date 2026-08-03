@@ -3,6 +3,18 @@ return {
         'folke/sidekick.nvim',
         opts = {
             cli = {
+                win = {
+                    keys = {
+                        nav_right = {
+                            '<c-l>',
+                            function()
+                                return ''
+                            end,
+                            expr = true,
+                            desc = 'Disable terminal clear',
+                        },
+                    },
+                },
                 tools = {
                     codex = {
                         cmd = { 'codex', '--sandbox', 'danger-full-access' },

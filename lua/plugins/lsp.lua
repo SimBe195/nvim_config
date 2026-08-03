@@ -83,7 +83,7 @@ return {
         cmd = 'ConformInfo',
         keys = {
             {
-                '<leader>lF',
+                '<leader>cF',
                 function()
                     require('conform').format { formatters = { 'injected' }, timeout_ms = 3000 }
                 end,
