@@ -10,6 +10,7 @@ vim.g.have_nerd_font = true
 require 'lazy_bootstrap'
 
 -- Load core configurations
+require 'config.diagnostics'
 require 'config.options'
 require 'config.lsp'
 require 'config.keymaps'

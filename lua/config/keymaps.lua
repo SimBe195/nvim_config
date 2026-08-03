@@ -1,14 +1,37 @@
 -- [[ Basic Keymaps ]]
 local map = vim.keymap.set
 
+local root_markers = {
+    '.git',
+    'Cargo.toml',
+    'CMakeLists.txt',
+    'pyproject.toml',
+    'package.json',
+    'Makefile',
+}
+
+local function root()
+    return vim.fs.root(0, root_markers) or vim.uv.cwd()
+end
+
+local function fzf(command, opts)
+    return function()
+        local resolved = type(opts) == 'function' and opts() or opts or {}
+        require('fzf-lua')[command](resolved)
+    end
+end
+
 map('n', '<Leader>lf', function()
-    require('conform').format { async = true }
+    require('conform').format { async = true, lsp_format = 'fallback' }
 end, { desc = 'Format buffer' })
 
 map('n', '<Leader>w', '<Cmd>w<Cr>', { desc = 'Save buffer' })
 map('n', '<Leader>c', function()
     Snacks.bufdelete()
 end, { desc = 'Close buffer' })
+map('n', '<Leader>C', function()
+    Snacks.bufdelete.other()
+end, { desc = 'Close all other buffers' })
 map('n', '<Leader>qq', '<Cmd>qa<Cr>', { desc = 'Exit neovim' })
 
 -- better up/down
@@ -20,153 +43,201 @@ map('v', '<', '<gv')
 map('v', '>', '>gv')
 
 -- quickfix navigation
-map('n', '[q', vim.cmd.cprev, { desc = 'Previous Quickfix' })
-map('n', ']q', vim.cmd.cnext, { desc = 'Next Quickfix' })
+map('n', '[q', vim.cmd.cprev, { desc = 'Previous quickfix' })
+map('n', ']q', vim.cmd.cnext, { desc = 'Next quickfix' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 map('n', '<Esc>', '<Cmd>nohlsearch<Cr>')
 
 -- Diagnostic keymaps
-map('n', '<Leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic quickfix list' })
+map('n', '<Leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic loclist' })
 map('n', '<Leader>d', vim.diagnostic.open_float, { desc = 'Open diagnostics in float' })
 
 -- Exit terminal mode in the builtin terminal.
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
 map('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+-- Explorers
 map('n', '<Leader>e', function()
-    local MiniFiles = require 'mini.files'
-    local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
-    vim.defer_fn(function()
-        MiniFiles.reveal_cwd()
-    end, 30)
-end, { desc = 'Open file exporer' })
+    Snacks.explorer { cwd = root() }
+end, { desc = 'Explorer root' })
+map('n', '<Leader>E', function()
+    Snacks.explorer()
+end, { desc = 'Explorer cwd' })
+map('n', '<Leader>fe', function()
+    Snacks.explorer { cwd = root() }
+end, { desc = 'Explorer root' })
+map('n', '<Leader>fE', function()
+    Snacks.explorer()
+end, { desc = 'Explorer cwd' })
+map('n', '<Leader>fm', function()
+    require('mini.files').open(vim.api.nvim_buf_get_name(0), true)
+end, { desc = 'Open mini.files at current file' })
+map('n', '<Leader>fM', function()
+    require('mini.files').open(vim.uv.cwd(), true)
+end, { desc = 'Open mini.files cwd' })
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
-map('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-map('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- Window navigation
+map('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus left' })
+map('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus right' })
+map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus down' })
+map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus up' })
 
 -- Split current window
 map('n', '-', '<C-W>s', { desc = 'Split window horizontally' })
 map('n', '|', '<C-W>v', { desc = 'Split window vertically' })
 
 -- Resize current window
-map('n', '<C-Up>', "<cmd>lua require'util.ui'.smart_resize('up')<Cr>", { desc = 'Resize window upward' })
-map('n', '<C-Down>', "<cmd>lua require'util.ui'.smart_resize('down')<Cr>", { desc = 'Resize window downward' })
-map('n', '<C-Left>', "<cmd>lua require'util.ui'.smart_resize('left')<Cr>", { desc = 'Resize window leftward' })
-map('n', '<C-Right>', "<cmd>lua require'util.ui'.smart_resize('right')<Cr>", { desc = 'Resize window rightward' })
+map('n', '<C-Up>', function()
+    require('util.ui').smart_resize 'up'
+end, { desc = 'Resize window upward' })
+map('n', '<C-Down>', function()
+    require('util.ui').smart_resize 'down'
+end, { desc = 'Resize window downward' })
+map('n', '<C-Left>', function()
+    require('util.ui').smart_resize 'left'
+end, { desc = 'Resize window leftward' })
+map('n', '<C-Right>', function()
+    require('util.ui').smart_resize 'right'
+end, { desc = 'Resize window rightward' })
 
--- Keybinds to make buffer navigation easier.
---  Use Shift+<hl> to switch between buffers
-map('n', '<S-h>', '<Cmd>bprev<Cr>', { desc = 'Prev buffer' })
+-- Buffer navigation
+map('n', '<S-h>', '<Cmd>bprev<Cr>', { desc = 'Previous buffer' })
 map('n', '<S-l>', '<Cmd>bnext<Cr>', { desc = 'Next buffer' })
 
--- Telescope keybinds
-local builtin = require 'telescope.builtin'
-map('n', '<Leader>ff', builtin.find_files, { desc = 'Telescope files' })
-map('n', '<Leader>fw', builtin.live_grep, { desc = 'Telescope words in working directory' })
-map('n', '<Leader>f/', builtin.current_buffer_fuzzy_find, { desc = 'Telescope words in currend buffer' })
-map('n', '<Leader>r', builtin.resume, { desc = 'Telescope resume previous search' })
-map('n', '<Leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-map('n', '<Leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-map('n', '<Leader>fr', builtin.lsp_references, { desc = 'Telescope LSP references' })
+-- Pickers
+map('n', '<Leader><Space>', function()
+    Snacks.picker.files { cwd = root() }
+end, { desc = 'Find files root' })
+map('n', '<Leader>,', function()
+    Snacks.picker.buffers()
+end, { desc = 'Buffers' })
+map('n', '<Leader>:', function()
+    Snacks.picker.command_history()
+end, { desc = 'Command history' })
+map('n', '<Leader>ff', fzf('files', function()
+    return { cwd = root() }
+end), { desc = 'Files root' })
+map('n', '<Leader>fF', fzf('files'), { desc = 'Files cwd' })
+map('n', '<Leader>fg', fzf('git_files'), { desc = 'Git files' })
+map('n', '<Leader>fw', fzf('live_grep', function()
+    return { cwd = root() }
+end), { desc = 'Grep root' })
+map('n', '<Leader>fW', fzf('live_grep'), { desc = 'Grep cwd' })
+map('n', '<Leader>f/', fzf('blines'), { desc = 'Buffer lines' })
+map('n', '<Leader>fb', fzf('buffers'), { desc = 'Buffers' })
+map('n', '<Leader>fh', fzf('help_tags'), { desc = 'Help tags' })
+map('n', '<Leader>fo', fzf('oldfiles'), { desc = 'Recent files' })
+map('n', '<Leader>fp', function()
+    Snacks.picker.projects()
+end, { desc = 'Projects' })
+map('n', '<Leader>fr', fzf('lsp_references'), { desc = 'LSP references' })
+map('n', '<Leader>r', fzf('resume'), { desc = 'Resume picker' })
 
--- Leap keybinds
-map({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
-map({ 'n', 'x', 'o' }, 'S', '<Plug>(leap-from-window)')
+map('n', '<Leader>sd', function()
+    Snacks.picker.diagnostics()
+end, { desc = 'Diagnostics' })
+map('n', '<Leader>sD', function()
+    Snacks.picker.diagnostics_buffer()
+end, { desc = 'Buffer diagnostics' })
+map('n', '<Leader>ss', function()
+    Snacks.picker.lsp_symbols()
+end, { desc = 'LSP symbols' })
+map('n', '<Leader>sS', function()
+    Snacks.picker.lsp_workspace_symbols()
+end, { desc = 'LSP workspace symbols' })
+map('n', '<Leader>sk', function()
+    Snacks.picker.keymaps()
+end, { desc = 'Keymaps' })
+map('n', '<Leader>su', function()
+    Snacks.picker.undo()
+end, { desc = 'Undo history' })
+map('n', '<Leader>uC', function()
+    Snacks.picker.colorschemes()
+end, { desc = 'Colorschemes' })
 
 -- Nvim spider
-map({ 'n', 'o', 'x' }, 'w', "<cmd>lua require('spider').motion('w')<Cr>", { desc = 'Spider-w' })
-map({ 'n', 'o', 'x' }, 'e', "<cmd>lua require('spider').motion('e')<Cr>", { desc = 'Spider-e' })
-map({ 'n', 'o', 'x' }, 'b', "<cmd>lua require('spider').motion('b')<Cr>", { desc = 'Spider-b' })
+map({ 'n', 'o', 'x' }, 'w', function()
+    require('spider').motion 'w'
+end, { desc = 'Spider-w' })
+map({ 'n', 'o', 'x' }, 'e', function()
+    require('spider').motion 'e'
+end, { desc = 'Spider-e' })
+map({ 'n', 'o', 'x' }, 'b', function()
+    require('spider').motion 'b'
+end, { desc = 'Spider-b' })
 
 -- Yanky
-map({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)')
-map({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)')
-map({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)')
-map({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
+map({ 'n', 'x' }, '<Leader>p', function()
+    Snacks.picker.yanky()
+end, { desc = 'Yank history' })
+map({ 'n', 'x' }, 'y', '<Plug>(YankyYank)', { desc = 'Yank text' })
+map({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)', { desc = 'Put after cursor' })
+map({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)', { desc = 'Put before cursor' })
+map({ 'n', 'x' }, 'gp', '<Plug>(YankyGPutAfter)', { desc = 'Put after selection' })
+map({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)', { desc = 'Put before selection' })
+map('n', '<C-p>', '<Plug>(YankyPreviousEntry)', { desc = 'Previous yank entry' })
+map('n', '<C-n>', '<Plug>(YankyNextEntry)', { desc = 'Next yank entry' })
+map('n', '[y', '<Plug>(YankyCycleForward)', { desc = 'Cycle yank forward' })
+map('n', ']y', '<Plug>(YankyCycleBackward)', { desc = 'Cycle yank backward' })
 
-map('n', '<C-p>', '<Plug>(YankyPreviousEntry)')
-map('n', '<C-n>', '<Plug>(YankyNextEntry)')
-
--- Lsp
-map('n', 'K', function()
-    return vim.lsp.buf.hover()
-end, { desc = 'Display hover documentation' })
-map('n', 'gK', function()
-    return vim.lsp.buf.signature_help()
-end, { desc = 'Signature help' })
-map('i', '<C-k>', function()
-    return vim.lsp.buf.signature_help()
-end, { desc = 'Signature help' })
-map('n', 'gd', vim.lsp.buf.definition, { desc = 'Jump to definition' })
-map('n', 'gD', vim.lsp.buf.declaration, { desc = 'Jump to declaration' })
-map('n', 'gi', vim.lsp.buf.implementation, { desc = 'Jump to implementation' })
-map('n', 'gy', vim.lsp.buf.type_definition, { desc = 'Jump to type definition' })
-map('n', 'gr', vim.lsp.buf.references, { desc = 'References' })
-map('n', '<Leader>la', vim.lsp.buf.code_action, { desc = 'LSP code action' })
-map('n', '<Leader>lr', vim.lsp.buf.rename, { desc = 'Rename symbol' })
-map('n', '<Leader>lR', function()
-    Snacks.rename.rename_file()
-end, { desc = 'Rename file' })
+-- LSP
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('__lsp_keymaps__', { clear = true }),
+    callback = function(event)
+        local opts = { buffer = event.buf }
+        map('n', 'K', vim.lsp.buf.hover, vim.tbl_extend('force', opts, { desc = 'Hover documentation' }))
+        map('n', 'gK', vim.lsp.buf.signature_help, vim.tbl_extend('force', opts, { desc = 'Signature help' }))
+        map('i', '<C-k>', vim.lsp.buf.signature_help, vim.tbl_extend('force', opts, { desc = 'Signature help' }))
+        map('n', 'gd', function()
+            Snacks.picker.lsp_definitions()
+        end, vim.tbl_extend('force', opts, { desc = 'Goto definition' }))
+        map('n', 'gD', vim.lsp.buf.declaration, vim.tbl_extend('force', opts, { desc = 'Goto declaration' }))
+        map('n', 'gi', function()
+            Snacks.picker.lsp_implementations()
+        end, vim.tbl_extend('force', opts, { desc = 'Goto implementation' }))
+        map('n', 'gy', function()
+            Snacks.picker.lsp_type_definitions()
+        end, vim.tbl_extend('force', opts, { desc = 'Goto type definition' }))
+        map('n', 'gr', function()
+            Snacks.picker.lsp_references()
+        end, vim.tbl_extend('force', opts, { desc = 'References', nowait = true }))
+        map({ 'n', 'x' }, '<Leader>la', vim.lsp.buf.code_action, vim.tbl_extend('force', opts, { desc = 'LSP code action' }))
+        map('n', '<Leader>lr', vim.lsp.buf.rename, vim.tbl_extend('force', opts, { desc = 'Rename symbol' }))
+        map('n', '<Leader>lR', function()
+            Snacks.rename.rename_file()
+        end, vim.tbl_extend('force', opts, { desc = 'Rename file' }))
+        map('n', '<Leader>li', '<Cmd>LspInfo<Cr>', vim.tbl_extend('force', opts, { desc = 'LSP info' }))
+        map('n', '<Leader>lA', function()
+            local inc_rename = require 'inc_rename'
+            return ':' .. inc_rename.config.cmd_name .. ' ' .. vim.fn.expand '<cword>'
+        end, vim.tbl_extend('force', opts, { expr = true, desc = 'Incremental rename' }))
+        map('n', '<Leader>lh', '<cmd>LspClangdSwitchSourceHeader<cr>', vim.tbl_extend('force', opts, { desc = 'Switch source/header' }))
+        map('n', '<Leader>K', '<plug>(vimtex-doc-package)', vim.tbl_extend('force', opts, { desc = 'Vimtex docs', silent = true }))
+    end,
+})
 
 -- Snacks
-map('n', '<leader>c', function()
-    Snacks.bufdelete()
-end, { desc = 'Close buffer' })
-
-map('n', '<leader>C', function()
-    Snacks.bufdelete.other()
-end, { desc = 'Close all other buffers' })
-
 map('n', '<leader>gg', function()
     Snacks.lazygit()
 end, { desc = 'Lazygit' })
-
 map('n', '<leader>gf', function()
     Snacks.lazygit.log_file()
 end, { desc = 'Lazygit current file history' })
-
 map('n', '<leader>gl', function()
     Snacks.lazygit.log()
 end, { desc = 'Lazygit log' })
 
 -- Harpoon
-map('n', '<leader>h', function()
+map('n', '<leader>H', function()
     require('harpoon'):list():add()
 end, { desc = 'Harpoon file' })
-
-local conf = require('telescope.config').values
-local function toggle_telescope(harpoon_files)
-    local file_paths = {}
-    for _, item in ipairs(harpoon_files.items) do
-        table.insert(file_paths, item.value)
-    end
-
-    require('telescope.pickers')
-        .new({}, {
-            prompt_title = 'Harpoon',
-            finder = require('telescope.finders').new_table {
-                results = file_paths,
-            },
-            previewer = conf.file_previewer {},
-            sorter = conf.generic_sorter {},
-        })
-        :find()
-end
-
-map('n', '<leader>fh', function()
-    toggle_telescope(require('harpoon'):list())
+map('n', '<leader>h', function()
+    local harpoon = require 'harpoon'
+    harpoon.ui:toggle_quick_menu(harpoon:list())
 end, { desc = 'Harpoon quick menu' })
-
 map('n', '<C-S-P>', function()
     require('harpoon'):list():prev()
 end, { desc = 'Previous harpoon buffer' })
-
 map('n', '<C-S-N>', function()
     require('harpoon'):list():next()
 end, { desc = 'Next harpoon buffer' })
@@ -176,4 +247,5 @@ for i = 1, 5 do
         require('harpoon'):list():select(i)
     end, { desc = 'Harpoon to file ' .. i })
 end
+
 -- vim: ts=2 sts=2 sw=2 et

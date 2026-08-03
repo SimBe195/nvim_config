@@ -8,7 +8,7 @@ autocmd('BufWritePre', {
     pattern = '*',
     group = augroup '__formatter__',
     callback = function(args)
-        require('conform').format { async = false, lsp_fallback = true, bufnr = args.buf }
+        require('conform').format { async = false, lsp_format = 'fallback', bufnr = args.buf }
     end,
 })
 
@@ -32,6 +32,15 @@ autocmd({ 'BufRead', 'BufNewFile' }, {
     pattern = 'returnn.config',
     command = 'set filetype=python',
     group = '__filetypes__',
+})
+
+autocmd('FileType', {
+    group = '__filetypes__',
+    pattern = { 'text' },
+    callback = function()
+        vim.opt_local.wrap = false
+        vim.opt_local.spell = true
+    end,
 })
 
 autocmd('BufReadPost', {

@@ -18,7 +18,7 @@ opt.showmode = false
 opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
 -- Sync clipboard between OS and Neovim.
-opt.clipboard = 'unnamedplus'
+opt.clipboard:append { 'unnamed', 'unnamedplus' }
 
 -- What to show when triggering completion in insert mode
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
@@ -93,8 +93,8 @@ opt.backup = false
 -- Improve scrolling performance in larger files
 opt.lazyredraw = true
 
--- Limit syntax highlighting to first 200 columns
-opt.synmaxcol = 200
+-- Limit syntax highlighting to first 500 columns
+opt.synmaxcol = 500
 
 -- Enhance command-line completion
 opt.wildmenu = true
@@ -106,6 +106,9 @@ opt.winminwidth = 5
 
 -- Disable line wrap
 opt.wrap = false
+
+-- Enable next edit suggestions from sidekick
+vim.g.sidekick_nes = true
 
 -- Allow cursor to move where there is no text in visual block mode
 opt.virtualedit = 'block'
@@ -124,6 +127,23 @@ opt.fillchars = {
     foldsep = ' ',
     diff = '╱',
     eob = ' ',
+}
+
+local function paste()
+    return { vim.fn.split(vim.fn.getreg '', '\n'), vim.fn.getregtype '' }
+end
+
+local osc52 = require 'vim.ui.clipboard.osc52'
+vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+        ['+'] = osc52.copy '+',
+        ['*'] = osc52.copy '*',
+    },
+    paste = {
+        ['+'] = paste,
+        ['*'] = paste,
+    },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

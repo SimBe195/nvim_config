@@ -1,13 +1,10 @@
 return {
     {
         'folke/snacks.nvim',
-        lazy = false,
+        priority = 1000,
         opts = {
-            -- Animations for several actions
             animate = { enabled = true },
-            -- Automatically disable LSP and treesitter for files larger than 1.5MB
             bigfile = { enabled = true },
-            -- Nice looking dashboard when starting nvim
             dashboard = {
                 enabled = true,
                 sections = {
@@ -18,18 +15,47 @@ return {
                     { section = 'startup' },
                 },
             },
-            -- Focus on the active scope by dimming the rest
             dim = { enabled = true },
-            -- Automatically configure lazygit with the right theme and integrate edit with neovim instance
+            explorer = { enabled = true },
+            indent = {
+                enabled = false,
+                scope = { enabled = false },
+            },
+            input = { enabled = true },
             lazygit = { enabled = true },
-            -- Pretty vim.notify
             notifier = { enabled = true },
-            -- Scope detection based on treesitter or indent, introduces `ii`, `ai`, `]i` and `[i` keymaps to select/jump scopes
+            picker = {
+                enabled = true,
+                win = {
+                    input = {
+                        keys = {
+                            ['<a-c>'] = { 'toggle_cwd', mode = { 'n', 'i' } },
+                        },
+                    },
+                },
+                actions = {
+                    toggle_cwd = function(picker)
+                        local cwd = vim.fs.normalize(vim.uv.cwd() or '.')
+                        local current = picker:cwd()
+                        local root = vim.fs.root(picker.input.filter.current_buf, {
+                            '.git',
+                            'Cargo.toml',
+                            'CMakeLists.txt',
+                            'pyproject.toml',
+                            'package.json',
+                        }) or cwd
+                        picker:set_cwd(current == root and cwd or root)
+                        picker:find()
+                    end,
+                },
+            },
+            quickfile = { enabled = true },
+            rename = { enabled = true },
             scope = { enabled = true },
-            -- Smooth scrolling
-            scroll = { enabled = true },
-            -- Pretty status column
+            scroll = { enabled = false },
             statuscolumn = { enabled = true },
+            toggle = { enabled = true },
+            words = { enabled = true },
         },
     },
 }

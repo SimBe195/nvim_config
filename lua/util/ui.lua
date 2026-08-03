@@ -52,9 +52,9 @@ return {
             end
         elseif direction == 'right' then
             if win_left + win_width >= total_width then
-                vim.cmd 'vertical resize -2'
-            else
                 vim.cmd 'vertical resize +2'
+            else
+                vim.cmd 'vertical resize -2'
             end
         end
     end,
