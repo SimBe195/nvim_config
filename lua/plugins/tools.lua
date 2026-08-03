@@ -1,65 +1,36 @@
+local function current_file_or_root()
+    local file = vim.api.nvim_buf_get_name(0)
+    return file ~= '' and file or require('util.root').get()
+end
+
+local function mini_files(path)
+    return function()
+        require('mini.files').open(path(), true)
+    end
+end
+
 return {
-    {
-        'ibhagwan/fzf-lua',
-        cmd = 'FzfLua',
-        opts = function()
-            local actions = require('fzf-lua').actions
-            return {
-                'default-title',
-                fzf_colors = true,
-                fzf_opts = {
-                    ['--no-scrollbar'] = true,
-                },
-                defaults = {
-                    formatter = 'path.dirname_first',
-                },
-                files = {
-                    cwd_prompt = false,
-                    actions = {
-                        ['alt-i'] = { actions.toggle_ignore },
-                        ['alt-h'] = { actions.toggle_hidden },
-                    },
-                },
-                grep = {
-                    actions = {
-                        ['alt-i'] = { actions.toggle_ignore },
-                        ['alt-h'] = { actions.toggle_hidden },
-                    },
-                },
-                winopts = {
-                    width = 0.8,
-                    height = 0.8,
-                    row = 0.5,
-                    col = 0.5,
-                    preview = {
-                        scrollchars = { '┃', '' },
-                    },
-                },
-            }
-        end,
-        config = function(_, opts)
-            if opts[1] == 'default-title' then
-                local function fix(table_)
-                    table_.prompt = table_.prompt ~= nil and ' ' or nil
-                    for _, value in pairs(table_) do
-                        if type(value) == 'table' then
-                            fix(value)
-                        end
-                    end
-                    return table_
-                end
-                opts = vim.tbl_deep_extend('force', fix(require('fzf-lua.profiles.default-title')), opts)
-                opts[1] = nil
-            end
-            require('fzf-lua').setup(opts)
-            require('fzf-lua').register_ui_select()
-        end,
-    },
     {
         'folke/which-key.nvim',
         event = 'VeryLazy',
         opts = {
             preset = 'helix',
+            spec = {
+                { '<leader>a', group = 'ai', mode = { 'n', 'x' } },
+                { '<leader>b', group = 'buffers' },
+                { '<leader>d', group = 'debug' },
+                { '<leader>f', group = 'files' },
+                { '<leader>g', group = 'git' },
+                { '<leader>l', group = 'lsp' },
+                { '<leader>m', group = 'markdown' },
+                { '<leader>q', group = 'quit' },
+                { '<leader>r', group = 'refactor', mode = { 'n', 'x' } },
+                { '<leader>s', group = 'search' },
+                { '<leader>t', group = 'terminal' },
+                { '<leader>u', group = 'ui' },
+                { '<leader>x', group = 'diagnostics' },
+                { '<localleader>l', group = 'vimtex' },
+            },
             plugins = {
                 spelling = {
                     enabled = true,
@@ -79,6 +50,23 @@ return {
     },
     {
         'nvim-mini/mini.files',
+        keys = {
+            { '<leader>e', mini_files(current_file_or_root), desc = 'Explorer current file' },
+            {
+                '<leader>E',
+                mini_files(function()
+                    return vim.uv.cwd()
+                end),
+                desc = 'Explorer cwd',
+            },
+            {
+                '<leader>fe',
+                mini_files(function()
+                    return require('util.root').get()
+                end),
+                desc = 'Explorer root',
+            },
+        },
         opts = {
             mappings = {
                 close = 'q',
@@ -103,7 +91,9 @@ return {
             },
         },
         config = function(_, opts)
-            require('mini.files').setup(opts)
+            local mini = require 'mini.files'
+            mini.setup(opts)
+            local group = vim.api.nvim_create_augroup('__mini_files__', { clear = true })
 
             local show_dotfiles = true
             local filter_show = function()
@@ -115,7 +105,7 @@ return {
 
             local function toggle_dotfiles()
                 show_dotfiles = not show_dotfiles
-                require('mini.files').refresh {
+                mini.refresh {
                     content = { filter = show_dotfiles and filter_show or filter_hide },
                 }
             end
@@ -123,26 +113,27 @@ return {
             local function map_split(buf_id, lhs, direction, close_on_file)
                 vim.keymap.set('n', lhs, function()
                     local new_target_window
-                    local cur_target_window = require('mini.files').get_explorer_state().target_window
+                    local cur_target_window = mini.get_explorer_state().target_window
                     if cur_target_window ~= nil then
                         vim.api.nvim_win_call(cur_target_window, function()
                             vim.cmd('belowright ' .. direction .. ' split')
                             new_target_window = vim.api.nvim_get_current_win()
                         end)
 
-                        require('mini.files').set_target_window(new_target_window)
-                        require('mini.files').go_in { close_on_file = close_on_file }
+                        mini.set_target_window(new_target_window)
+                        mini.go_in { close_on_file = close_on_file }
                     end
                 end, { buffer = buf_id, desc = 'Open in ' .. direction .. ' split' })
             end
 
             vim.api.nvim_create_autocmd('User', {
+                group = group,
                 pattern = 'MiniFilesBufferCreate',
                 callback = function(args)
                     local buf_id = args.data.buf_id
                     vim.keymap.set('n', 'g.', toggle_dotfiles, { buffer = buf_id, desc = 'Toggle hidden files' })
                     vim.keymap.set('n', 'gc', function()
-                        local entry = MiniFiles.get_fs_entry()
+                        local entry = mini.get_fs_entry()
                         local directory = entry and vim.fs.dirname(entry.path)
                         if directory then
                             vim.fn.chdir(directory)
@@ -153,6 +144,14 @@ return {
                     map_split(buf_id, '<C-w>v', 'vertical', false)
                     map_split(buf_id, '<C-w>S', 'horizontal', true)
                     map_split(buf_id, '<C-w>V', 'vertical', true)
+                end,
+            })
+
+            vim.api.nvim_create_autocmd('User', {
+                group = group,
+                pattern = 'MiniFilesActionRename',
+                callback = function(event)
+                    Snacks.rename.on_rename_file(event.data.from, event.data.to)
                 end,
             })
         end,
@@ -177,29 +176,6 @@ return {
         config = function(_, opts)
             require('project_nvim').setup(opts)
         end,
-    },
-    {
-        'Civitasv/cmake-tools.nvim',
-        lazy = true,
-        init = function()
-            local loaded = false
-            local function check()
-                local cwd = vim.uv.cwd()
-                if cwd and vim.fn.filereadable(cwd .. '/CMakeLists.txt') == 1 then
-                    require('lazy').load { plugins = { 'cmake-tools.nvim' } }
-                    loaded = true
-                end
-            end
-            check()
-            vim.api.nvim_create_autocmd('DirChanged', {
-                callback = function()
-                    if not loaded then
-                        check()
-                    end
-                end,
-            })
-        end,
-        opts = {},
     },
     {
         'iamcco/markdown-preview.nvim',

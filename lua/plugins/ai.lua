@@ -10,8 +10,22 @@ return {
                 },
             },
         },
+        config = function(_, opts)
+            require('sidekick').setup(opts)
+
+            local function set_sidekick_highlights()
+                vim.api.nvim_set_hl(0, 'SidekickChat', { link = 'Normal' })
+            end
+
+            vim.api.nvim_create_autocmd('ColorScheme', {
+                group = vim.api.nvim_create_augroup('__sidekick_highlights__', { clear = true }),
+                callback = function()
+                    vim.schedule(set_sidekick_highlights)
+                end,
+            })
+            vim.schedule(set_sidekick_highlights)
+        end,
         keys = {
-            { '<leader>a', '', desc = '+ai', mode = { 'n', 'v' } },
             {
                 '<c-.>',
                 function()

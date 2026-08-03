@@ -18,11 +18,30 @@ return {
     {
         'gbprod/yanky.nvim',
         event = 'BufReadPost',
+        keys = {
+            {
+                '<Leader>p',
+                function()
+                    ---@diagnostic disable-next-line: undefined-field
+                    Snacks.picker.yanky()
+                end,
+                mode = { 'n', 'x' },
+                desc = 'Yank history',
+            },
+            { 'p', '<Plug>(YankyPutAfter)', mode = { 'n', 'x' }, desc = 'Put after cursor' },
+            { 'P', '<Plug>(YankyPutBefore)', mode = { 'n', 'x' }, desc = 'Put before cursor' },
+            { 'gp', '<Plug>(YankyGPutAfter)', mode = { 'n', 'x' }, desc = 'Put after selection' },
+            { 'gP', '<Plug>(YankyGPutBefore)', mode = { 'n', 'x' }, desc = 'Put before selection' },
+            { '<C-p>', '<Plug>(YankyPreviousEntry)', desc = 'Previous yank entry' },
+            { '<C-n>', '<Plug>(YankyNextEntry)', desc = 'Next yank entry' },
+            { '[y', '<Plug>(YankyCycleForward)', desc = 'Cycle yank forward' },
+            { ']y', '<Plug>(YankyCycleBackward)', desc = 'Cycle yank backward' },
+        },
         opts = {
             system_clipboard = {
                 sync_with_ring = not vim.env.SSH_CONNECTION,
             },
-            highlight = { timer = 150 },
+            highlight = { on_yank = false, on_put = true, timer = 150 },
         },
     },
     {
@@ -105,7 +124,6 @@ return {
         event = { 'BufReadPre', 'BufNewFile' },
         opts = {},
         keys = {
-            { '<leader>r', '', desc = '+refactor', mode = { 'n', 'x' } },
             {
                 '<leader>rs',
                 function()

@@ -8,6 +8,13 @@ autocmd('BufWritePre', {
     pattern = '*',
     group = augroup '__formatter__',
     callback = function(args)
+        if
+            vim.g.autoformat == false
+            or vim.b[args.buf].autoformat == false
+            or vim.bo[args.buf].filetype == 'bigfile'
+        then
+            return
+        end
         require('conform').format { async = false, lsp_format = 'fallback', bufnr = args.buf }
     end,
 })
@@ -17,6 +24,16 @@ autocmd('TextYankPost', {
     group = augroup '__highlight_yank__',
     callback = function()
         (vim.hl or vim.highlight).on_yank()
+    end,
+})
+
+autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
+    desc = 'Reload files changed outside Neovim',
+    group = augroup '__checktime__',
+    callback = function()
+        if vim.bo.buftype ~= 'nofile' then
+            vim.cmd.checktime()
+        end
     end,
 })
 
@@ -36,10 +53,36 @@ autocmd({ 'BufRead', 'BufNewFile' }, {
 
 autocmd('FileType', {
     group = '__filetypes__',
-    pattern = { 'text' },
+    pattern = { 'gitcommit', 'markdown', 'markdown.mdx', 'tex', 'text' },
     callback = function()
-        vim.opt_local.wrap = false
+        vim.opt_local.wrap = true
+        vim.opt_local.linebreak = true
         vim.opt_local.spell = true
+    end,
+})
+
+autocmd('FileType', {
+    desc = 'Use q to close temporary buffers',
+    group = '__filetypes__',
+    pattern = {
+        'checkhealth',
+        'dap-float',
+        'help',
+        'lazy',
+        'lspinfo',
+        'man',
+        'mason',
+        'noice',
+        'notify',
+        'qf',
+        'query',
+        'snacks_notif',
+        'snacks_win',
+        'startuptime',
+    },
+    callback = function(event)
+        vim.bo[event.buf].buflisted = false
+        vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true, desc = 'Close window' })
     end,
 })
 
@@ -70,13 +113,5 @@ autocmd({ 'BufWritePre' }, {
         end
         local file = vim.uv.fs_realpath(event.match) or event.match
         vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
-    end,
-})
-
-autocmd('User', {
-    pattern = 'MiniFilesActionRename',
-    group = augroup '__file_rename__',
-    callback = function(event)
-        Snacks.rename.on_rename_file(event.data.from, event.data.to)
     end,
 })

@@ -43,7 +43,7 @@ return {
         'nvim-treesitter/nvim-treesitter',
         branch = 'main',
         build = ':TSUpdate',
-        event = { 'BufReadPost', 'BufNewFile' },
+        lazy = false,
         opts = {
             ensure_installed = unique {
                 'bash',
@@ -72,11 +72,6 @@ return {
                 'vim',
                 'vimdoc',
             },
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = { 'latex' },
-            },
-            indent = { enable = true },
         },
         config = function(_, opts)
             local xdg_config = vim.env.XDG_CONFIG_HOME or (vim.env.HOME .. '/.config')
@@ -112,13 +107,33 @@ return {
                 if have 'fish' then
                     table.insert(parsers, 'fish')
                 end
-                if have('rofi') or have('wofi') then
+                if have 'rofi' or have 'wofi' then
                     table.insert(parsers, 'rasi')
                 end
                 opts.ensure_installed = unique(parsers)
             end
 
-            require('nvim-treesitter.configs').setup(opts)
+            require('nvim-treesitter').setup {
+                install_dir = opts.install_dir,
+            }
+
+            if type(opts.ensure_installed) == 'table' and #vim.api.nvim_list_uis() > 0 then
+                require('nvim-treesitter').install(opts.ensure_installed)
+            end
+
+            vim.api.nvim_create_autocmd('FileType', {
+                group = vim.api.nvim_create_augroup('__treesitter__', { clear = true }),
+                callback = function(args)
+                    if vim.bo[args.buf].filetype == 'bigfile' then
+                        return
+                    end
+
+                    local ok = pcall(vim.treesitter.start, args.buf)
+                    if ok then
+                        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                    end
+                end,
+            })
         end,
     },
     {

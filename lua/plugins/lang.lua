@@ -55,10 +55,10 @@ return {
         opts = {
             server = {
                 on_attach = function(_, bufnr)
-                    vim.keymap.set('n', '<leader>lA', function()
+                    vim.keymap.set('n', '<leader>lC', function()
                         vim.cmd.RustLsp 'codeAction'
                     end, { desc = 'Rust code action', buffer = bufnr })
-                    vim.keymap.set('n', '<leader>dr', function()
+                    vim.keymap.set('n', '<leader>dR', function()
                         vim.cmd.RustLsp 'debuggables'
                     end, { desc = 'Rust debuggables', buffer = bufnr })
                 end,
@@ -118,7 +118,7 @@ return {
             vim.g.vimtex_quickfix_method = vim.fn.executable 'pplatex' == 1 and 'pplatex' or 'latexlog'
         end,
         keys = {
-            { '<localLeader>l', '', desc = '+vimtex', ft = 'tex' },
+            { '<leader>K', '<plug>(vimtex-doc-package)', desc = 'Vimtex docs', ft = 'tex', silent = true },
         },
     },
 }

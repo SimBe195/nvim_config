@@ -17,8 +17,31 @@ opt.showmode = false
 -- Set statuscolumn
 opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
--- Sync clipboard between OS and Neovim.
-opt.clipboard:append { 'unnamed', 'unnamedplus' }
+-- Sync clipboard between OS and Neovim. OSC52 is only forced for remote
+-- sessions because it can make every yank feel slow in local terminals.
+local use_osc52 = not vim.env.NVIM_NO_OSC52 and (vim.env.SSH_TTY or vim.env.NVIM_FORCE_OSC52 == '1')
+if use_osc52 then
+    opt.clipboard:append { 'unnamed', 'unnamedplus' }
+
+    local function paste()
+        return { vim.fn.split(vim.fn.getreg '', '\n'), vim.fn.getregtype '' }
+    end
+
+    local osc52 = require 'vim.ui.clipboard.osc52'
+    vim.g.clipboard = {
+        name = 'OSC 52',
+        copy = {
+            ['+'] = osc52.copy '+',
+            ['*'] = osc52.copy '*',
+        },
+        paste = {
+            ['+'] = paste,
+            ['*'] = paste,
+        },
+    }
+elseif vim.fn.has 'clipboard' == 1 then
+    opt.clipboard:append { 'unnamedplus' }
+end
 
 -- What to show when triggering completion in insert mode
 opt.completeopt = { 'menu', 'menuone', 'noselect' }
@@ -127,23 +150,6 @@ opt.fillchars = {
     foldsep = ' ',
     diff = '╱',
     eob = ' ',
-}
-
-local function paste()
-    return { vim.fn.split(vim.fn.getreg '', '\n'), vim.fn.getregtype '' }
-end
-
-local osc52 = require 'vim.ui.clipboard.osc52'
-vim.g.clipboard = {
-    name = 'OSC 52',
-    copy = {
-        ['+'] = osc52.copy '+',
-        ['*'] = osc52.copy '*',
-    },
-    paste = {
-        ['+'] = paste,
-        ['*'] = paste,
-    },
 }
 
 -- vim: ts=2 sts=2 sw=2 et

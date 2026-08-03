@@ -98,6 +98,8 @@ return {
         dependencies = { 'nvim-tree/nvim-web-devicons', 'catppuccin/nvim' },
         config = function()
             local mocha = require('catppuccin.palettes').get_palette 'mocha'
+            local catppuccin_bufferline = require 'catppuccin.special.bufferline'
+            ---@diagnostic disable-next-line: different-requires
             require('bufferline').setup {
                 options = {
                     diagnostics = false,
@@ -107,7 +109,7 @@ return {
                     show_close_icon = true,
                     always_show_bufferline = true,
                 },
-                highlights = require('catppuccin.groups.integrations.bufferline').get {
+                highlights = catppuccin_bufferline.get_theme {
                     styles = { 'italic', 'bold' },
                     custom = {
                         all = {
@@ -124,15 +126,6 @@ return {
     {
         'nvim-mini/mini.diff',
         event = 'VeryLazy',
-        keys = {
-            {
-                '<leader>go',
-                function()
-                    require('mini.diff').toggle_overlay(0)
-                end,
-                desc = 'Toggle mini.diff overlay',
-            },
-        },
         opts = {
             view = {
                 style = 'sign',
@@ -145,12 +138,43 @@ return {
         },
     },
     {
+        'sindrets/diffview.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        cmd = {
+            'DiffviewClose',
+            'DiffviewFileHistory',
+            'DiffviewFocusFiles',
+            'DiffviewOpen',
+            'DiffviewRefresh',
+            'DiffviewToggleFiles',
+        },
+        keys = {
+            { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = 'Diffview working tree' },
+            { '<leader>gD', '<cmd>DiffviewOpen HEAD<cr>', desc = 'Diffview against HEAD' },
+            { '<leader>gh', '<cmd>DiffviewFileHistory %<cr>', desc = 'Current file history' },
+            { '<leader>gH', '<cmd>DiffviewFileHistory<cr>', desc = 'Repository history' },
+            { '<leader>gq', '<cmd>DiffviewClose<cr>', desc = 'Close Diffview' },
+        },
+        opts = {
+            enhanced_diff_hl = true,
+            view = {
+                default = {
+                    layout = 'diff2_horizontal',
+                },
+                file_history = {
+                    layout = 'diff2_horizontal',
+                },
+            },
+        },
+    },
+    {
         'nvim-lualine/lualine.nvim',
         event = { 'VimEnter', 'BufReadPost', 'BufNewFile' },
         config = function()
+            ---@diagnostic disable-next-line: undefined-field
             require('lualine').setup {
                 options = {
-                    theme = 'catppuccin',
+                    theme = 'catppuccin-nvim',
                     globalstatus = true,
                     component_separators = { left = '|', right = '|' },
                 },
@@ -198,6 +222,7 @@ return {
             scope = { show_start = false, show_end = false },
             exclude = {
                 filetypes = {
+                    'bigfile',
                     'help',
                     'lazy',
                     'mason',
@@ -239,6 +264,7 @@ return {
         init = function()
             vim.api.nvim_create_autocmd('FileType', {
                 pattern = {
+                    'bigfile',
                     'fzf',
                     'help',
                     'lazy',
@@ -265,6 +291,9 @@ return {
         opts = {
             mode = 'cursor',
             max_lines = 3,
+            on_attach = function(buf)
+                return vim.bo[buf].filetype ~= 'bigfile'
+            end,
         },
     },
     {
@@ -283,7 +312,7 @@ return {
                                 return
                             end
                             local r, g, b = match:sub(2, 2), match:sub(3, 3), match:sub(4, 4)
-                            return MiniHipatterns.compute_hex_color_group('#' .. r .. r .. g .. g .. b .. b, 'bg')
+                            return hipatterns.compute_hex_color_group('#' .. r .. r .. g .. g .. b .. b, 'bg')
                         end,
                         extmark_opts = { priority = 2000 },
                     },
