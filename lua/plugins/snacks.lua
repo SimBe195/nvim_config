@@ -1,3 +1,50 @@
+local function nvim_editor()
+    local progpath = vim.v.progpath
+    if progpath and progpath ~= '' then
+        local expanded = vim.fn.exepath(progpath)
+        return expanded ~= '' and expanded or progpath
+    end
+
+    local nv = vim.fn.exepath 'nv'
+    if nv ~= '' then
+        return nv
+    end
+
+    local nvim = vim.fn.exepath 'nvim'
+    return nvim ~= '' and nvim or 'nvim'
+end
+
+local function lazygit_editor_config()
+    local editor = vim.fn.shellescape(vim.fn.fnamemodify(nvim_editor(), ':p'))
+    local remote = ('%s --server "$NVIM"'):format(editor)
+
+    return {
+        editCommandTemplate = ('[ -z "$NVIM" ] && (%s -- {{filename}}) || (%s --remote-send "q" && %s --remote {{filename}})'):format(
+            editor,
+            remote,
+            remote
+        ),
+        editAtLine = ('[ -z "$NVIM" ] && (%s +{{line}} -- {{filename}}) || (%s --remote-send "q" && %s --remote {{filename}} && %s --remote-send ":{{line}}<CR>")'):format(
+            editor,
+            remote,
+            remote,
+            remote
+        ),
+        openDirInEditor = ('[ -z "$NVIM" ] && (%s -- {{dir}}) || (%s --remote-send "q" && %s --remote {{dir}})'):format(
+            editor,
+            remote,
+            remote
+        ),
+    }
+end
+
+local function configure_lazygit(opts, defaults)
+    opts.config = vim.tbl_deep_extend('force', vim.deepcopy(defaults.config or {}), {
+        os = lazygit_editor_config(),
+    })
+    opts.config.os.editPreset = nil
+end
+
 return {
     {
         'folke/snacks.nvim',
@@ -47,7 +94,10 @@ return {
                 scope = { enabled = false },
             },
             input = { enabled = true },
-            lazygit = { enabled = true },
+            lazygit = {
+                enabled = true,
+                config = configure_lazygit,
+            },
             notifier = { enabled = true },
             picker = {
                 enabled = true,

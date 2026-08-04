@@ -10,7 +10,62 @@ local function unique(list)
     return ret
 end
 
+local function normalize_path(path)
+    local normalized = vim.fn.fnamemodify(vim.fn.expand(path), ':p')
+    if normalized ~= '/' then
+        normalized = normalized:gsub('/+$', '')
+    end
+    return normalized
+end
+
+local function slug(value)
+    local normalized = value:lower():gsub('[^%w._-]+', '-'):gsub('^-+', ''):gsub('-+$', '')
+    return normalized ~= '' and normalized or 'unknown'
+end
+
+local function python_tag()
+    local python = vim.fn.exepath 'python3'
+    if python == '' then
+        return 'pyunknown'
+    end
+
+    local version = vim.fn.systemlist({ python, '--version' })[1] or ''
+    local major, minor = version:match 'Python%s+(%d+)%.(%d+)'
+    if major and minor then
+        return 'py' .. major .. minor
+    end
+    return 'pyunknown'
+end
+
+local function container_name()
+    for _, key in ipairs {
+        'APPTAINER_CONTAINER',
+        'SINGULARITY_CONTAINER',
+        'APPTAINER_NAME',
+        'SINGULARITY_NAME',
+    } do
+        local value = vim.env[key]
+        if value and value ~= '' then
+            return slug(value)
+        end
+    end
+end
+
 local function ensure_mason_tools(opts)
+    local mason_bins = {
+        [normalize_path(opts.install_root_dir) .. '/bin'] = true,
+        [normalize_path(vim.fn.stdpath 'data' .. '/mason') .. '/bin'] = true,
+    }
+    if vim.env.MASON and vim.env.MASON ~= '' then
+        mason_bins[normalize_path(vim.env.MASON) .. '/bin'] = true
+    end
+
+    local paths = vim.split(vim.env.PATH or '', ':', { plain = true })
+    paths = vim.tbl_filter(function(path)
+        return path == '' or not mason_bins[normalize_path(path)]
+    end, paths)
+    vim.env.PATH = table.concat(paths, ':')
+
     require('mason').setup(opts)
 
     local registry = require 'mason-registry'
@@ -34,6 +89,20 @@ local function ensure_mason_tools(opts)
             end
         end
     end)
+end
+
+local function mason_install_root()
+    local root = vim.env.NVIM_MASON_ROOT
+    if root and root ~= '' then
+        return normalize_path(root)
+    end
+
+    local container = container_name()
+    if container then
+        return normalize_path(('%s/mason-containers/%s-%s'):format(vim.fn.stdpath 'data', container, python_tag()))
+    end
+
+    return normalize_path(vim.fn.stdpath 'data' .. '/mason')
 end
 
 return {
@@ -144,6 +213,8 @@ return {
             { '<leader>cm', '<cmd>Mason<cr>', desc = 'Mason' },
         },
         opts = {
+            install_root_dir = mason_install_root(),
+            PATH = 'append',
             ensure_installed = {
                 'black',
                 'clang-format',
