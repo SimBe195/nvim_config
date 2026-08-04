@@ -9,6 +9,15 @@ local function mini_files(path)
     end
 end
 
+local function mini_files_toggle(path)
+    return function()
+        local mini = require 'mini.files'
+        if mini.close() == nil then
+            mini.open(path(), true)
+        end
+    end
+end
+
 return {
     {
         'folke/which-key.nvim',
@@ -50,7 +59,7 @@ return {
     {
         'nvim-mini/mini.files',
         keys = {
-            { '<leader>e', mini_files(current_file_or_root), desc = 'Explorer current file' },
+            { '<leader>e', mini_files_toggle(current_file_or_root), desc = 'Toggle explorer current file' },
             {
                 '<leader>E',
                 mini_files(function()

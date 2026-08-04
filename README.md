@@ -54,7 +54,7 @@ Leader is `<space>`.
 | `<leader>bD` | Close all other buffers |
 | `<leader>qq` | Quit Neovim |
 | `<leader>wq` | Close window |
-| `<leader>e` | Mini.files at current file |
+| `<leader>e` | Toggle Mini.files at current file |
 | `<leader>E` | Mini.files at cwd |
 | `<S-h>` / `<S-l>` | Previous / next buffer |
 | `<C-h/j/k/l>` | Move between Neovim splits and tmux panes |
