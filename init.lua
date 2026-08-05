@@ -3,6 +3,17 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- nvim-treesitter's main branch requires the external tree-sitter CLI.
+-- Some environments may not inherit Cargo's bin directory,
+-- so expose a Cargo-installed CLI before plugins initialize.
+local cargo_bin = vim.fs.joinpath(vim.env.HOME, '.cargo', 'bin')
+if vim.uv.fs_stat(vim.fs.joinpath(cargo_bin, 'tree-sitter')) then
+    local path = vim.split(vim.env.PATH or '', ':', { plain = true })
+    if not vim.tbl_contains(path, cargo_bin) then
+        vim.env.PATH = cargo_bin .. ':' .. (vim.env.PATH or '')
+    end
+end
+
 -- Set to true if a Nerd Font is installed and selected in the terminal
 vim.g.have_nerd_font = true
 
