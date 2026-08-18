@@ -35,6 +35,7 @@ return {
                 { '<leader>m', group = 'markdown' },
                 { '<leader>q', group = 'quit' },
                 { '<leader>r', group = 'refactor', mode = { 'n', 'x' } },
+                { '<leader>s', group = 'session' },
                 { '<leader>t', group = 'terminal' },
                 { '<leader>w', group = 'windows' },
                 { '<localleader>l', group = 'vimtex' },
@@ -177,6 +178,34 @@ return {
         config = function(_, opts)
             require('project_nvim').setup(opts)
         end,
+    },
+    {
+        'folke/persistence.nvim',
+        event = 'BufReadPre',
+        opts = {},
+        keys = {
+            {
+                '<leader>ss',
+                function()
+                    require('persistence').load()
+                end,
+                desc = 'Restore session (cwd)',
+            },
+            {
+                '<leader>sl',
+                function()
+                    require('persistence').load { last = true }
+                end,
+                desc = 'Restore last session',
+            },
+            {
+                '<leader>sd',
+                function()
+                    require('persistence').stop()
+                end,
+                desc = "Don't save current session",
+            },
+        },
     },
     {
         'iamcco/markdown-preview.nvim',
