@@ -23,7 +23,7 @@ local function conform_opts()
         cmake = { 'cmake_format' },
         cpp = { 'clang-format' },
         lua = { 'stylua' },
-        python = { 'black' },
+        python = { 'ruff_fix', 'ruff_format' },
         rust = { 'rustfmt', lsp_format = 'fallback' },
         sh = { 'shfmt' },
         toml = { 'taplo' },
