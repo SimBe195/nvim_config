@@ -26,6 +26,7 @@ local function conform_opts()
         python = { 'ruff_fix', 'ruff_format' },
         rust = { 'rustfmt', lsp_format = 'fallback' },
         sh = { 'shfmt' },
+        sql = { 'sql_formatter' },
         toml = { 'taplo' },
     }
 
@@ -100,6 +101,8 @@ return {
             linters_by_ft = {
                 cmake = { 'cmakelint' },
                 markdown = { 'markdownlint-cli2' },
+                sql = { 'sqlfluff' },
+                yaml = { 'yamllint' },
             },
         },
         config = function(_, opts)

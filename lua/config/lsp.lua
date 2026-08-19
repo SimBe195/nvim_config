@@ -92,6 +92,29 @@ local servers = {
     marksman = {},
     texlab = {},
     taplo = {},
+    ts_ls = {},
+    eslint = {},
+    yamlls = {
+        before_init = function(_, new_config)
+            local ok_schema, schemastore = pcall(require, 'schemastore')
+            if not ok_schema then
+                return
+            end
+            new_config.settings = new_config.settings or {}
+            new_config.settings.yaml = new_config.settings.yaml or {}
+            new_config.settings.yaml.schemas = new_config.settings.yaml.schemas or {}
+            vim.list_extend(new_config.settings.yaml.schemas, schemastore.yaml.schemas())
+        end,
+        settings = {
+            yaml = {
+                keyOrdering = false,
+                format = { enable = true },
+                validate = true,
+                schemaStore = { enable = false, url = '' },
+            },
+        },
+    },
+    sqlls = {},
     bashls = {},
     julials = {},
 }
