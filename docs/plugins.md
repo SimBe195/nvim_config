@@ -18,11 +18,11 @@ This file documents the plugins configured in `lua/plugins/*.lua`, what each one
 | `todo-comments.nvim` | Highlights TODO/FIXME-style comments. | None |
 | `indent-blankline.nvim` | Draws indentation guides, excluding big files and special buffers. | None |
 | `mini.indentscope` | Shows the current indentation scope. It is disabled for big files and special UI buffers. | None |
-| `mini.animate` | Adds short resize and scroll animations. It is disabled in Neovide and for big files. | None |
+| `mini.animate` | Adds short resize animations. Scroll animation is disabled to keep jumps and mouse-wheel scrolling responsive. It is disabled entirely in Neovide and for big files. | None |
 | `mini.hipatterns` | Highlights hex colors and shorthand hex colors in buffers. | None |
 | `mini.diff` | Provides lightweight Git signs and the diff summary used by lualine. The overlay mapping was removed in favor of Diffview. | None |
 | `diffview.nvim` | Opens side-by-side Git diffs and file history views. This is the primary readable diff workflow. | `<leader>gd`, `<leader>gD`, `<leader>gh`, `<leader>gH`, `<leader>gq` |
-| `baleia.nvim` | Colorizes ANSI escape sequences in log buffers. | None |
+| `baleia.nvim` | Colorizes ANSI escape sequences in log buffers, except buffers detected as big files. | None |
 | `nvim-treesitter` | Installs parsers and enables Treesitter highlighting, indentation, and folding helpers. It skips highlighting and indentation for `bigfile` buffers. | None |
 | `nvim-treesitter-context` | Shows sticky semantic context at the top of code windows. | None |
 | `nvim-lspconfig` | Configures built-in LSP clients. LSP maps are attached buffer-locally when a server starts. | `K`, `gK`, `gd`, `gD`, `gi`, `gy`, `gr`, `<leader>ca`, `<leader>cr`, `<leader>cR`, `<leader>ci`, `<leader>cN`, clangd-only `<leader>ch` |

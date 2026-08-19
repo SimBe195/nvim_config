@@ -249,7 +249,7 @@ return {
                     timing = animate.gen_timing.linear { duration = 50, unit = 'total' },
                 },
                 scroll = {
-                    timing = animate.gen_timing.linear { duration = 150, unit = 'total' },
+                    enable = false,
                 },
             })
         end,
@@ -328,6 +328,9 @@ return {
             vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
                 pattern = { 'log*', '*log' },
                 callback = function(args)
+                    if vim.bo[args.buf].filetype == 'bigfile' then
+                        return
+                    end
                     baleia.once(args.buf)
                 end,
             })
