@@ -9,7 +9,9 @@ This is a fully custom Neovim config managed with `lazy.nvim`. It keeps a LazyVi
 - `ripgrep` for grep pickers
 - `fd` for the Snacks file picker
 - `lazygit` for the Git TUI mappings
-- `node`/`npm`, `go`, `rustup`, `zathura`, etc. as needed for the languages you use
+- `node`/`npm`, `go`, `rustup`, etc. as needed for the languages you use
+- A TeX distribution with `latexmk`, `chktex`, and `biber` plus `zathura` for LaTeX; optionally
+  `tex-fmt` or a working `latexindent` for formatting and `pplatex` for nicer build logs
 - `codex` CLI for the Sidekick Codex integration
 - A Nerd Font for icons
 
@@ -97,6 +99,48 @@ Leader is `<space>`.
 | `<leader>h` / `<leader>H` | Harpoon menu / add file |
 | `<leader>1` through `<leader>5` | Jump to Harpoon entry |
 | `<leader>tt` | Toggle terminal |
+
+## LaTeX
+
+`vimtex` drives the editing side and `texlab` provides the language server side.
+
+- Compilation is `latexmk` in continuous mode: `<localleader>ll` starts and stops it, and the PDF
+  refreshes on every write. `-shell-escape` is deliberately not enabled.
+- `<localleader>lv` runs a SyncTeX forward search in Zathura. Backward search is Ctrl+click in the
+  PDF and needs `synctex-editor-command` in `~/.config/zathura/zathurarc`. On Wayland the viewer
+  backend is `zathura_simple`, which syncs over D-Bus instead of locating the window with `xdotool`.
+- Diagnostics come from `texlab`: `chktex` on open and save, plus undefined references and citations.
+  Build warnings stay in the vimtex quickfix list, which does not open for warnings and filters
+  `Overfull`/`Underfull` box noise.
+- Completion for citations, labels, packages, and includes comes from `texlab` through `blink.cmp`,
+  and LaTeX snippets come from `friendly-snippets`.
+- Highlighting for tex buffers is vimtex's syntax engine rather than Treesitter, because the latex
+  parser has no conceal support. The parser is still installed, so folds and Treesitter text objects
+  keep working. Conceal is on at `conceallevel=2` and is disabled for the cursor line.
+- `gq` uses vimtex's LaTeX-aware line breaking, and `:` counts as a keyword character so label and
+  citation keys such as `sec:intro` behave as one word for `w`, `*`, and `ciw`.
+- Formatting on save prefers `tex-fmt`, falls back to `latexindent`, and falls back to `texlab` if
+  neither is usable. `.bib` files are formatted by `texlab` itself.
+
+| Key | Action |
+| --- | --- |
+| `<localleader>ll` | Toggle continuous compilation |
+| `<localleader>lk` | Stop compilation |
+| `<localleader>lv` | Forward search in the viewer |
+| `<localleader>lt` / `<localleader>lT` | Open / toggle table of contents |
+| `<localleader>le` / `<localleader>lq` | Build errors in quickfix / compiler log |
+| `<localleader>lo` | Compiler output |
+| `<localleader>lc` / `<localleader>lC` | Clean auxiliary files / including the PDF |
+| `<localleader>li` | Vimtex info for the buffer |
+| `<localleader>la` | Context menu for the item under the cursor |
+| `<localleader>lm` | List insert-mode math maps |
+| `<leader>K` | Package documentation |
+| `dse` / `cse` | Delete / change surrounding environment |
+| `dsc` / `csc` | Delete / change surrounding command |
+| `tss` / `tse` | Toggle environment star / environment delimiter style |
+| `tsd` / `tsf` | Toggle delimiter size modifier / fraction style |
+| `]]` / `[[` | Next / previous section |
+| `ic` / `ac`, `id` / `ad`, `ie` / `ae`, `i$` / `a$` | Command, delimiter, environment, and math text objects |
 
 ## Plugin Reference
 

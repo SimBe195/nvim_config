@@ -19,6 +19,9 @@ return {
                     codex = {
                         cmd = { 'codex', '--sandbox', 'danger-full-access' },
                     },
+                    antigravity = {
+                        cmd = { 'agy' },
+                    },
                 },
             },
         },

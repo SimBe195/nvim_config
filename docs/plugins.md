@@ -56,7 +56,7 @@ This file documents the plugins configured in `lua/plugins/*.lua`, what each one
 | `SchemaStore.nvim` | JSON schema catalog for `jsonls`. | None |
 | `crates.nvim` | Cargo.toml crate completion, hover, and actions. | None |
 | `rustaceanvim` | Rust LSP and DAP integration. | Rust buffers: `<leader>cC`, `<leader>dR` |
-| `vimtex` | LaTeX editing, compilation, viewing, and docs. | `<leader>K` for package docs; Vimtex also provides its own localleader maps |
+| `vimtex` | LaTeX editing, continuous `latexmk` compilation, Zathura SyncTeX viewing, syntax conceal, and package docs. Owns building and forward search; `texlab` handles LSP features and `chktex` diagnostics. | `<leader>K` for package docs; Vimtex also provides its own `<localleader>l` maps |
 | `nvim-dap` | Debug adapter protocol core and general debug controls. | `<leader>dB`, `<leader>db`, `<leader>dc`, `<leader>da`, `<leader>dC`, `<leader>dg`, `<leader>di`, `<leader>dj`, `<leader>dk`, `<leader>dl`, `<leader>do`, `<leader>dO`, `<leader>dP`, `<leader>dr`, `<leader>ds`, `<leader>dt`, `<leader>dw` |
 | `nvim-dap-ui` | Debugger side panels and eval UI. | `<leader>du`, `<leader>de` |
 | `nvim-dap-virtual-text` | Inline virtual text for debugger values. | None |

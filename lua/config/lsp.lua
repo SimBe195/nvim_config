@@ -90,7 +90,44 @@ local servers = {
         },
     },
     marksman = {},
-    texlab = {},
+    -- Vimtex owns building and forward search, so texlab is configured for the
+    -- language-server side of LaTeX: completion for citations, labels, packages
+    -- and includes, references, rename, symbols, and chktex diagnostics. Its
+    -- build settings mirror the vimtex latexmk invocation so an explicit
+    -- `textDocument/build` request behaves the same way.
+    texlab = {
+        settings = {
+            texlab = {
+                build = {
+                    executable = 'latexmk',
+                    args = { '-pdf', '-synctex=1', '-interaction=nonstopmode', '-file-line-error', '%f' },
+                    onSave = false,
+                    forwardSearchAfter = false,
+                },
+                forwardSearch = {
+                    executable = 'zathura',
+                    args = { '--synctex-forward', '%l:1:%f', '%p' },
+                },
+                chktex = {
+                    onOpenAndSave = true,
+                    onEdit = false,
+                },
+                diagnosticsDelay = 300,
+                formatterLineLength = 100,
+                -- Only used when conform has no formatter for the buffer
+                latexFormatter = vim.fn.executable 'tex-fmt' == 1 and 'tex-fmt' or 'latexindent',
+                bibtexFormatter = 'texlab',
+                latexindent = {
+                    modifyLineBreaks = false,
+                },
+                inlayHints = {
+                    labelDefinitions = true,
+                    labelReferences = true,
+                    maxLength = 40,
+                },
+            },
+        },
+    },
     taplo = {},
     ts_ls = {},
     eslint = {},

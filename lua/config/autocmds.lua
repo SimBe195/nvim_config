@@ -62,6 +62,20 @@ autocmd('FileType', {
 })
 
 autocmd('FileType', {
+    desc = 'LaTeX editing defaults',
+    group = '__filetypes__',
+    pattern = { 'tex', 'plaintex', 'bib' },
+    callback = function()
+        -- Render vimtex's conceal rules, but keep the raw source visible on the
+        -- line the cursor is on so editing math never happens blind.
+        vim.opt_local.conceallevel = 2
+        vim.opt_local.concealcursor = ''
+        -- `\cite{...}` and `\ref{...}` keys are single words for w/e/*
+        vim.opt_local.iskeyword:append ':'
+    end,
+})
+
+autocmd('FileType', {
     desc = 'Use q to close temporary buffers',
     group = '__filetypes__',
     pattern = {

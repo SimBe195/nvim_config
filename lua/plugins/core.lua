@@ -190,10 +190,20 @@ return {
                 require('nvim-treesitter').install(opts.ensure_installed)
             end
 
+            -- Filetypes that keep their own highlighter and indent expression.
+            -- Vimtex's syntax engine covers math regions, nested languages, and
+            -- conceal, none of which the latex Treesitter queries provide. The
+            -- parser itself stays available for folds and Treesitter text objects.
+            local skip_treesitter = {
+                bigfile = true,
+                tex = true,
+                plaintex = true,
+            }
+
             vim.api.nvim_create_autocmd('FileType', {
                 group = vim.api.nvim_create_augroup('__treesitter__', { clear = true }),
                 callback = function(args)
-                    if vim.bo[args.buf].filetype == 'bigfile' then
+                    if skip_treesitter[vim.bo[args.buf].filetype] then
                         return
                     end
 
